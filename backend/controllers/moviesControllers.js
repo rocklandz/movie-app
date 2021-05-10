@@ -30,10 +30,25 @@ const getMovieById = asyncHandler(async (req, res) => {
 const getMoviesByName = asyncHandler(async (req, res) => {
   const searchTerm = req.query.name.split('-').join(' ').toLowerCase();
   const movies = await Movie.find({
-    // title: { $regex: searchTerm, $options: 'i' },
-    title: 'Mortal Kombat',
+    title: { $regex: searchTerm, $options: 'i' },
   });
 
+  if (movies) {
+    res.status(200);
+    res.json(movies);
+  } else {
+    throw new Error('No movies found');
+  }
+});
+
+// @desc    Fetch movies by genre
+// @route   GET /api/movies/genres
+// @access  Public
+const getMoviesByGenre = asyncHandler(async (req, res) => {
+  const searchTerm = req.query.genre.toString();
+  const movies = await Movie.find({
+    genres: { $all: [searchTerm] },
+  });
   if (movies) {
     res.status(200);
     res.json(movies);
@@ -70,7 +85,7 @@ const createMovie = asyncHandler(async (req, res) => {
     country,
     language,
     adult,
-    releaseDate,
+    release_date,
     url_path,
   } = req.body;
 
@@ -83,7 +98,7 @@ const createMovie = asyncHandler(async (req, res) => {
     country,
     language,
     adult,
-    releaseDate,
+    release_date,
     url_path,
   });
 
@@ -108,7 +123,7 @@ const updateMovie = asyncHandler(async (req, res) => {
     country,
     language,
     adult,
-    releaseDate,
+    release_date,
     url_path,
   } = req.body;
 
@@ -123,7 +138,7 @@ const updateMovie = asyncHandler(async (req, res) => {
     movie.country = country;
     movie.language = language;
     movie.adult = adult;
-    movie.releaseDate = releaseDate;
+    movie.release_date = release_date;
     movie.url_path = url_path;
 
     const updatedMovie = await movie.save();
@@ -176,10 +191,10 @@ const rateMovie = asyncHandler(async (req, res) => {
       (rating) => rating.user.toString() === req.user.id.toString()
     );
 
-    // if (alreadyRated) {
-    //   res.status(400);
-    //   throw new Error('You have already rated this movie!');
-    // }
+    if (alreadyRated) {
+      res.status(400);
+      throw new Error('You have already rated this movie!');
+    }
 
     movie.ratings.unshift({
       user: req.user._id,
@@ -201,6 +216,7 @@ export {
   getMovies,
   getMovieById,
   getMoviesByName,
+  getMoviesByGenre,
   createMovie,
   updateMovie,
   deleteMovie,

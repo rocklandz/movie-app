@@ -8,6 +8,7 @@ import {
   deleteMovie,
   createComment,
   rateMovie,
+  getMoviesByGenre,
 } from '../controllers/moviesControllers.js';
 import { protect, admin } from '../middlewares/authMiddleware.js';
 
@@ -15,6 +16,7 @@ const router = express.Router();
 
 router.route('/').get(getMovies).post(protect, admin, createMovie);
 router.route('/search').get(getMoviesByName);
+router.route('/genres').get(getMoviesByGenre);
 router.route('/:id').get(getMovieById);
 router.route('/:id/rate').put(protect, rateMovie);
 router.route('/:id/comment').put(protect, createComment);
