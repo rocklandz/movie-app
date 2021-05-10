@@ -10,6 +10,15 @@ const getMovies = asyncHandler(async (req, res) => {
   res.json(movies);
 });
 
+// @desc    Fetch top rated movies
+// @route   GET /api/movies/top-rated
+// @access  Public
+const getTopRated = asyncHandler(async (req, res) => {
+  const movies = await Movie.find({}).sort({ average_rating: -1 }).limit(5);
+
+  res.json(movies);
+});
+
 // @desc    Fetch single movie by Id
 // @route   GET /api/movies/:id
 // @access  Public
@@ -200,9 +209,9 @@ const rateMovie = asyncHandler(async (req, res) => {
       user: req.user._id,
       rating: userRating,
     });
-    movie.ratingCount++;
-    movie.totalRating += userRating;
-    movie.averageRating = (movie.totalRating / movie.ratingCount).toFixed(1);
+    movie.rating_count++;
+    movie.total_rating += userRating;
+    movie.average_rating = (movie.total_rating / movie.rating_count).toFixed(1);
 
     await movie.save();
     res.status(201).json(movie);
@@ -222,4 +231,5 @@ export {
   deleteMovie,
   createComment,
   rateMovie,
+  getTopRated,
 };
