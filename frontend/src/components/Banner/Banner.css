@@ -15,7 +15,7 @@
 
 .slider__backdrop {
   position: relative;
-  background-position: 35% 0;
+  background-position: 50% 30%;
   background-repeat: no-repeat;
   background-size: cover;
 }

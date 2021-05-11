@@ -11,18 +11,21 @@ import UserList from './screensAdmin/UserList.js';
 import MovieList from './screensAdmin/MovieList.js';
 import NewMovie from './screensAdmin/NewMovie.js';
 import EditMovie from './screensAdmin/EditMovie.js';
+import MovieGenres from './screens/MovieGenres';
 
 function App() {
   return (
     <Router>
       <Navbar />
-      <main>
+      <main className='min-h-screen'>
         <Route path='/admin/edit' component={EditMovie} exact />
         <Route path='/admin/new-movie' component={NewMovie} exact />
         <Route path='/admin/movies' component={MovieList} exact />
         <Route path='/admin/users' component={UserList} exact />
         <Route path='/login' component={Login} exact />
         <Route path='/register' component={Register} exact />
+        <Route path='/genres/:genre' component={MovieGenres} exact />
+        <Route path='/genres' component={MovieGenres} exact />
         <Route path='/movie/:id' component={MovieStream} exact />
         <Route path='/preview/:id' component={MoviePreview} exact />
         <Route path='/' component={HomePage} exact />

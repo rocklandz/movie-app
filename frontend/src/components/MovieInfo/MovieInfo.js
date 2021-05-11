@@ -40,9 +40,9 @@ const MovieInfo = ({ movie }) => {
 
           <div className='text-white flex items-center mb-3 flex-wrap'>
             {genres.map((genre) => (
-              <span key={genre} className='genre-btn'>
+              <Link to={`/genres/${genre}`} key={genre} className='genre-btn'>
                 {genre}
-              </span>
+              </Link>
             ))}
           </div>
 

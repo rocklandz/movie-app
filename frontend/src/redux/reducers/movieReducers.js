@@ -30,13 +30,16 @@ export const movieListReducer = (state = { movies: [] }, action) => {
 
   switch (type) {
     case MOVIE_LIST_REQUEST:
+    case MOVIE_GENRE_SEARCH_REQUEST:
       return { loading: true, movies: [] };
     case MOVIE_LIST_SUCCESS:
+    case MOVIE_GENRE_SEARCH_SUCCESS:
       return {
         loading: false,
         movies: payload,
       };
     case MOVIE_LIST_FAIL:
+    case MOVIE_GENRE_SEARCH_FAIL:
       return { loading: false, error: payload };
     default:
       return state;

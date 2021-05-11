@@ -9,6 +9,9 @@ import {
   MOVIE_TOPRATED_DETAILS_FAIL,
   MOVIE_TOPRATED_DETAILS_REQUEST,
   MOVIE_TOPRATED_DETAILS_SUCCESS,
+  MOVIE_GENRE_SEARCH_REQUEST,
+  MOVIE_GENRE_SEARCH_SUCCESS,
+  MOVIE_GENRE_SEARCH_FAIL,
 } from '../constants/movieConstants';
 
 export const getMovies = () => async (dispatch, getState) => {
@@ -58,6 +61,25 @@ export const getTopRated = () => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: MOVIE_TOPRATED_DETAILS_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const getMoviesByGenre = (genre) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: MOVIE_GENRE_SEARCH_REQUEST });
+
+    const { data } = await axios.get(
+      `http://localhost:5000/api/movies/genres?genre=${genre}`
+    );
+    dispatch({ type: MOVIE_GENRE_SEARCH_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: MOVIE_GENRE_SEARCH_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
