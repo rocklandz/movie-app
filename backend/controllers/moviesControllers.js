@@ -23,7 +23,10 @@ const getTopRated = asyncHandler(async (req, res) => {
 // @route   GET /api/movies/:id
 // @access  Public
 const getMovieById = asyncHandler(async (req, res) => {
-  const movie = await Movie.findById(req.params.id);
+  const movie = await Movie.findById(req.params.id).populate({
+    path: 'comments',
+    populate: { path: 'user', model: 'User', select: 'name' },
+  });
 
   if (movie) {
     res.json(movie);
@@ -171,7 +174,13 @@ const createComment = asyncHandler(async (req, res) => {
     });
 
     await movie.save();
-    res.status(201).json(movie);
+
+    const updatedMovie = await Movie.findById(req.params.id).populate({
+      path: 'comments',
+      populate: { path: 'user', model: 'User', select: 'name' },
+    });
+
+    res.status(201).json(updatedMovie);
   } else {
     res.status(404);
     throw new Error('No movie found');

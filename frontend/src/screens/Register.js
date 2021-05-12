@@ -1,14 +1,30 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { register } from '../redux/actions/userActions';
+import Loader from '../components/Loader/Loader';
 
-const Register = () => {
+const Register = ({ location, history }) => {
+  const dispatch = useDispatch();
+
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [username, setUsername] = useState('');
+
+  const { loading, error, userInfo } = useSelector((state) => state.userLogin);
+
+  const redirect = location.search ? location.search.split('=')[1] : '/';
+
+  useEffect(() => {
+    if (userInfo) {
+      history.push(redirect);
+    }
+  }, [userInfo]);
 
   const submitHandler = (e) => {
     e.preventDefault();
+    dispatch(register(username, email, password));
   };
 
   return (
@@ -51,7 +67,7 @@ const Register = () => {
             </label>
             <input
               value={password}
-              onChangee={(e) => setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
               className='text-input'
               type='password'
             />
@@ -63,16 +79,21 @@ const Register = () => {
             </label>
             <input
               value={confirmPassword}
-              onChangee={(e) => setConfirmPassword(e.target.value)}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               className='text-input'
               type='password'
             />
           </div>
 
+          {error && (
+            <div className='mb-2 text-center text-red-400'>{error}</div>
+          )}
+
           <div className='flex flex-col items-center'>
-            <button className='red-btn w-full' type='button'>
+            <button type='submit' className='red-btn w-full'>
               Register
             </button>
+            {loading && <Loader />}
             <div className='text-gray-400 text-sm'>
               Have an account?{' '}
               <Link to={'/login'} className='text-white'>

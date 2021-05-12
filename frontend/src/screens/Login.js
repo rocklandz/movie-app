@@ -1,12 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import Loader from '../components/Loader/Loader';
+import { login } from '../redux/actions/userActions';
 
-const Login = () => {
+const Login = ({ location, history }) => {
+  const dispatch = useDispatch();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const { loading, error, userInfo } = useSelector((state) => state.userLogin);
+
+  const redirect = location.search ? location.search.split('=')[1] : '/';
+
+  useEffect(() => {
+    if (userInfo) {
+      history.push(redirect);
+    }
+  }, [userInfo]);
+
   const submitHandler = (e) => {
     e.preventDefault();
+    dispatch(login(email, password));
   };
 
   return (
@@ -24,7 +40,7 @@ const Login = () => {
             </label>
             <input
               value={email}
-              onChang={(e) => setEmail(e.target.valuew)}
+              onChange={(e) => setEmail(e.target.value)}
               className='shadow appearance-none border w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
               id='username'
               type='text'
@@ -43,13 +59,19 @@ const Login = () => {
               type='password'
             />
           </div>
+
+          {error && (
+            <div className='mb-2 text-center text-red-400'>{error}</div>
+          )}
+
           <div className='flex flex-col items-center'>
             <button
               className='uppercase py-3 px-5 w-full border border-red-700 hover:bg-red-700 mb-2'
-              type='button'
+              type='submit'
             >
               Sign In
             </button>
+            {loading && <Loader />}
             <div className='text-gray-400 text-sm'>
               New to us?{' '}
               <Link to={'/register'} className='text-white'>

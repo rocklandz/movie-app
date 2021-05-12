@@ -36,8 +36,12 @@ const reducers = combineReducers({
   movieTopRated: movieTopRatedReducer,
 });
 
+const userInfoFromStorage = localStorage.getItem('userInfo')
+  ? JSON.parse(localStorage.getItem('userInfo'))
+  : null;
+
 const initState = {
-  userLogin: {},
+  userLogin: { userInfo: userInfoFromStorage },
 };
 
 const middlewares = [thunk];

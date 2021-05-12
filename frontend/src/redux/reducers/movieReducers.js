@@ -52,6 +52,7 @@ export const movieDetailsReducer = (state = {}, action) => {
   switch (type) {
     case MOVIE_DETAILS_REQUEST:
       return { loading: true };
+    case MOVIE_COMMENT_SUCCESS:
     case MOVIE_DETAILS_SUCCESS:
       return {
         loading: false,
@@ -120,7 +121,7 @@ export const movieCommentReducer = (state = {}, action) => {
 
   switch (type) {
     case MOVIE_COMMENT_REQUEST:
-      return { loading: true, movies: [] };
+      return { loading: true, movie: {} };
     case MOVIE_COMMENT_SUCCESS:
       return {
         loading: false,
