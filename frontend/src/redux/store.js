@@ -9,6 +9,7 @@ import {
   movieGenreSearchReducer,
   movieListReducer,
   movieNameSearchReducer,
+  movieRateReducer,
   movieTopRatedReducer,
 } from './reducers/movieReducers';
 import {
@@ -31,6 +32,7 @@ const reducers = combineReducers({
   movieDelete: movieDeleteReducer,
   movieCreate: movieCreateReducer,
   movieComment: movieCommentReducer,
+  movieRate: movieRateReducer,
   movieNameSearch: movieNameSearchReducer,
   movieGenreSearch: movieGenreSearchReducer,
   movieTopRated: movieTopRatedReducer,

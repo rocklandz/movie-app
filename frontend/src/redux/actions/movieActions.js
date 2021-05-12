@@ -16,6 +16,9 @@ import {
   MOVIE_CREATE_SUCCESS,
   MOVIE_COMMENT_FAIL,
   MOVIE_COMMENT_SUCCESS,
+  MOVIE_RATE_REQUEST,
+  MOVIE_RATE_SUCCESS,
+  MOVIE_RATE_FAIL,
 } from '../constants/movieConstants';
 
 export const getMovies = () => async (dispatch, getState) => {
@@ -92,12 +95,43 @@ export const getMoviesByGenre = (genre) => async (dispatch, getState) => {
   }
 };
 
-export const createComment = (movieId, comment) => async (
-  dispatch,
-  getState
-) => {
+export const createComment =
+  (movieId, comment) => async (dispatch, getState) => {
+    try {
+      dispatch({ type: MOVIE_COMMENT_REQUEST });
+
+      const {
+        userLogin: { userInfo },
+      } = getState();
+
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.put(
+        `http://localhost:5000/api/movies/${movieId}/comment`,
+        { comment },
+        config
+      );
+
+      dispatch({ type: MOVIE_COMMENT_SUCCESS, payload: data });
+    } catch (error) {
+      dispatch({
+        type: MOVIE_COMMENT_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
+
+export const createRating = (movieId, rating) => async (dispatch, getState) => {
   try {
-    dispatch({ type: MOVIE_COMMENT_REQUEST });
+    dispatch({ type: MOVIE_RATE_REQUEST });
 
     const {
       userLogin: { userInfo },
@@ -111,15 +145,15 @@ export const createComment = (movieId, comment) => async (
     };
 
     const { data } = await axios.put(
-      `http://localhost:5000/api/movies/${movieId}/comment`,
-      { comment },
+      `http://localhost:5000/api/movies/${movieId}/rate`,
+      { rating },
       config
     );
 
-    dispatch({ type: MOVIE_COMMENT_SUCCESS, payload: data });
+    dispatch({ type: MOVIE_RATE_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
-      type: MOVIE_COMMENT_FAIL,
+      type: MOVIE_RATE_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

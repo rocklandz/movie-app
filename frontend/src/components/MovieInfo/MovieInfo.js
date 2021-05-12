@@ -55,7 +55,12 @@ const MovieInfo = ({ movie }) => {
 
           <div className='text-white flex items-center mb-9'>
             <FaImdb className='text-yellow-300 text-4xl mr-2' />
-            <span className='text-2xl'>7.6</span>
+            <p className='text-2xl'>
+                      {movie.average_rating.toFixed(1)}{' '}
+                      <span className='text-sm text-gray-600'>
+                        ({movie.rating_count})
+                      </span>
+                    </p>
           </div>
 
           <button className='share__button rounded flex items-center px-5 py-2 text-white mb-5'>
