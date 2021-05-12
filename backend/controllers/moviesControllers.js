@@ -205,22 +205,29 @@ const rateMovie = asyncHandler(async (req, res) => {
   const movie = await Movie.findById(req.params.id);
 
   if (movie) {
-    const alreadyRated = movie.ratings.some(
+    const alreadyRated = movie.ratings.find(
       (rating) => rating.user.toString() === req.user.id.toString()
     );
 
     if (alreadyRated) {
-      res.status(400);
-      throw new Error('You have already rated this movie!');
+      movie.total_rating =
+        movie.total_rating - alreadyRated.rating + userRating;
+      alreadyRated.rating = userRating;
+      movie.average_rating = (movie.total_rating / movie.rating_count).toFixed(
+        1
+      );
     }
-
-    movie.ratings.unshift({
-      user: req.user._id,
-      rating: userRating,
-    });
-    movie.rating_count++;
-    movie.total_rating += userRating;
-    movie.average_rating = (movie.total_rating / movie.rating_count).toFixed(1);
+    if (!alreadyRated) {
+      movie.ratings.unshift({
+        user: req.user._id,
+        rating: userRating,
+      });
+      movie.rating_count++;
+      movie.total_rating += userRating;
+      movie.average_rating = (movie.total_rating / movie.rating_count).toFixed(
+        1
+      );
+    }
 
     await movie.save();
     res.status(201).json(movie);

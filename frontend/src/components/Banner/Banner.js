@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react';
 import Slider from 'react-slick';
 import SliderItem from './SliderItem';
 import 'slick-carousel/slick/slick.css';
@@ -7,7 +6,6 @@ import './Banner.css';
 
 const Banner = ({ movies }) => {
   const settings = {
-    dots: true,
     infinite: true,
     slidesToShow: 1,
     slidesToScroll: 1,

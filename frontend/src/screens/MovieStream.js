@@ -12,7 +12,7 @@ const MovieStream = ({ match }) => {
   const dispatch = useDispatch();
   const movieId = match.params.id;
 
-  const [rating, setRating] = useState(null);
+  const [showRating, setShowRating] = useState(false);
 
   const { loading, movie, error } = useSelector((state) => state.movieDetails);
 
@@ -21,7 +21,6 @@ const MovieStream = ({ match }) => {
   }, [dispatch, movieId]);
 
   const onRating = (result) => {
-    setRating(result);
     dispatch(createRating(movieId, result));
   };
 
@@ -40,7 +39,19 @@ const MovieStream = ({ match }) => {
               <div className='sm:w-3/4 sm:mr-5'>
                 <div>
                   <h1 className='text-3xl mb-2'>{movie.title}</h1>
-                  <div className='text-white flex items-center mb-2'>
+
+                  {showRating ? (
+                    <StarRating onRating={onRating} />
+                  ) : (
+                    <p
+                      className='h-full inline-block cursor-pointer bg-gray-700 block px-3 py-2 rounded-md text-sm mb-2'
+                      onClick={() => setShowRating(true)}
+                    >
+                      Rate this movie
+                    </p>
+                  )}
+
+                  <div className='text-white flex items-center mb-4'>
                     <FaImdb className='text-yellow-300 text-3xl mr-2' />
                     <p className='text-xl'>
                       {movie.average_rating.toFixed(1)}{' '}
@@ -49,8 +60,6 @@ const MovieStream = ({ match }) => {
                       </span>
                     </p>
                   </div>
-
-                  <StarRating onRating={onRating} />
 
                   <button className='share__button rounded flex items-center px-3 py-1 text-white mb-5'>
                     <ImFacebook2 className='mr-2 text-xl' />
