@@ -1,7 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import UserListItem from '../components/UserListItem/UserListItem';
+import { useDispatch, useSelector } from 'react-redux';
+import { listUsers } from '../redux/actions/userActions';
 
-const UserList = () => {
+const UserList = (history) => {
+  const dispatch = useDispatch();
+
+  const { userInfo } = useSelector((state) => state.userLogin);
+  const { loading, error, users } = useSelector((state) => state.userList);
+
+  useEffect(() => {
+    if (userInfo && userInfo.isAdmin) {
+      dispatch(listUsers());
+    } else {
+      history.push('/login');
+    }
+  }, [dispatch, history, userInfo]);
+
   return (
     <div className='max-w-7xl mx-auto mt-16 mb-32'>
       <div className='text-white bg-gray-800'>
@@ -11,13 +26,16 @@ const UserList = () => {
         <div className='px-3 py-4 flex justify-center'>
           <table className='w-full text-md bg-gray-900 shadow-md rounded mb-4'>
             <tbody>
-              <tr className='border-b'>
+              <tr>
                 <th className='text-left p-3 px-5'>Name</th>
                 <th className='text-left p-3 px-5'>Email</th>
                 <th className='text-left p-3 px-5'>Role</th>
                 <th></th>
               </tr>
-              <UserListItem />
+              {users &&
+                users.map((user) => (
+                  <UserListItem key={user._id} user={user} />
+                ))}
             </tbody>
           </table>
         </div>

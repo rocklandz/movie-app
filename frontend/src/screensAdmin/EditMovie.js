@@ -1,11 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { getMovie, updateMovie } from '../redux/actions/movieActions';
+import { MOVIE_UPDATE_RESET } from '../redux/constants/movieConstants';
 
-const EditMovie = () => {
+const EditMovie = ({ match, history }) => {
+  const dispatch = useDispatch();
+
+  const movieId = match.params.id;
+  const { movie, loading, error } = useSelector((state) => state.movieDetails);
+  const {
+    loading: loadingUpdate,
+    error: errorUpdate,
+    success: successUpdate,
+  } = useSelector((state) => state.movieUpdate);
+
   const [title, setTitle] = useState('');
   const [overview, setOverview] = useState('');
-  const [language, setLanguage] = useState(['en']);
   const [country, setCountry] = useState('United States');
   const [posterUrl, setPosterUrl] = useState('');
   const [actors, setActors] = useState([]);
@@ -17,8 +29,45 @@ const EditMovie = () => {
   const [actorInput, setActorInput] = useState('');
   const [genreInput, setGenreInput] = useState('');
 
+  useEffect(() => {
+    dispatch(getMovie(movieId));
+  }, []);
+
+  useEffect(() => {
+    if (successUpdate) {
+      dispatch({ type: MOVIE_UPDATE_RESET });
+      history.push('/admin/movies');
+    } else {
+      if (!movie) {
+        dispatch(getMovie(movieId));
+      } else {
+        setTitle(movie.title);
+        setOverview(movie.overview);
+        setCountry(movie.country);
+        setPosterUrl(movie.poster_lg);
+        setActors(movie.actors);
+        setAdult(movie.adult);
+        setGenres(movie.genres);
+        setMovieUrl(movie.url_path);
+      }
+    }
+  }, [dispatch, history, movieId, movie, successUpdate]);
+
   const submitHandler = (e) => {
     e.preventDefault();
+    dispatch(
+      updateMovie(movieId, {
+        title,
+        overview,
+        country,
+        poster_lg: posterUrl,
+        actors,
+        adult,
+        released_date: released,
+        genres,
+        url_path: movieUrl,
+      })
+    );
   };
 
   const addGenre = (e) => {
@@ -54,6 +103,7 @@ const EditMovie = () => {
                       <input
                         onChange={(e) => setTitle(e.target.value)}
                         value={title}
+                        required
                         type='text'
                         className='text-input'
                         placeholder='Movie title...'
@@ -78,6 +128,7 @@ const EditMovie = () => {
                       <textarea
                         onChange={(e) => setOverview(e.target.value)}
                         value={overview}
+                        required
                         type='text'
                         autoComplete='email'
                         className='text-input'
@@ -91,6 +142,7 @@ const EditMovie = () => {
                       <select
                         onChange={(e) => setCountry(e.target.value)}
                         value={country}
+                        required
                         autoComplete='country'
                         className='text-gray-900 mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
                       >
@@ -103,7 +155,7 @@ const EditMovie = () => {
                     <div className='col-span-6'>
                       <label className='inline-flex items-center mt-3'>
                         <input
-                          onChange={(e) => setAdult(!adult)}
+                          onChange={() => setAdult(!adult)}
                           checked={adult}
                           type='checkbox'
                           className='form-checkbox h-5 w-5 text-red-600'
@@ -118,7 +170,17 @@ const EditMovie = () => {
                       </label>
                       <div className='mb-4'>
                         {actors.map((actor) => (
-                          <div className='pill-btn bg-red-500'>{actor}</div>
+                          <div
+                            onClick={() => {
+                              const newActors = actors.filter(
+                                (a) => a !== actor
+                              );
+                              setActors(newActors);
+                            }}
+                            className='pill-btn bg-red-500 cursor-pointer'
+                          >
+                            {actor}
+                          </div>
                         ))}
                       </div>
                       <input
@@ -137,7 +199,17 @@ const EditMovie = () => {
                       </label>
                       <div className='mb-4'>
                         {genres.map((genre) => (
-                          <div className='pill-btn bg-purple-500'>{genre}</div>
+                          <div
+                            onClick={() => {
+                              const newGenres = genres.filter(
+                                (g) => g !== genre
+                              );
+                              setGenres(newGenres);
+                            }}
+                            className='pill-btn bg-purple-500 cursor-pointer'
+                          >
+                            {genre}
+                          </div>
                         ))}
                       </div>
                       <input
@@ -157,6 +229,7 @@ const EditMovie = () => {
                       <input
                         onChange={(e) => setPosterUrl(e.target.value)}
                         value={posterUrl}
+                        required
                         type='text'
                         className='text-input'
                       />
@@ -169,6 +242,7 @@ const EditMovie = () => {
                       <input
                         onChange={(e) => setMovieUrl(e.target.value)}
                         value={movieUrl}
+                        required
                         type='text'
                         className='text-input'
                       />

@@ -18,7 +18,7 @@ function App() {
     <Router>
       <Navbar />
       <main className='min-h-screen'>
-        <Route path='/admin/edit' component={EditMovie} exact />
+        <Route path='/admin/edit/:id' component={EditMovie} exact />
         <Route path='/admin/new-movie' component={NewMovie} exact />
         <Route path='/admin/movies' component={MovieList} exact />
         <Route path='/admin/users' component={UserList} exact />

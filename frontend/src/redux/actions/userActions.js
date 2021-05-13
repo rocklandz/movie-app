@@ -215,7 +215,7 @@ export const deleteUser = (id) => async (dispatch, getState) => {
   }
 };
 
-export const updateUser = (user) => async (dispatch, getState) => {
+export const updateUser = (userId, user) => async (dispatch, getState) => {
   try {
     dispatch({
       type: USER_UPDATE_REQUEST,
@@ -232,13 +232,9 @@ export const updateUser = (user) => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.put(`/api/users/${user._id}`, user, config);
+    const { data } = await axios.put(`/api/users/${userId}`, user, config);
 
-    dispatch({ type: USER_UPDATE_SUCCESS });
-
-    dispatch({ type: USER_DETAILS_SUCCESS, payload: data });
-
-    dispatch({ type: USER_DETAILS_RESET });
+    dispatch({ type: USER_UPDATE_SUCCESS, payload: data });
   } catch (error) {
     const message =
       error.response && error.response.data.message

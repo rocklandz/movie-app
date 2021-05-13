@@ -11,12 +11,15 @@ import {
   movieNameSearchReducer,
   movieRateReducer,
   movieTopRatedReducer,
+  movieUpdateReducer,
 } from './reducers/movieReducers';
 import {
   userDeleteReducer,
   userDetailsReducer,
+  userListReducer,
   userLoginReducer,
   userRegisterReducer,
+  userUpdateReducer,
 } from './reducers/userReducers';
 
 const reducers = combineReducers({
@@ -24,12 +27,15 @@ const reducers = combineReducers({
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,
   userDetails: userDetailsReducer,
+  userUpdate: userUpdateReducer,
   userDelete: userDeleteReducer,
+  userList: userListReducer,
 
   // Movie reducers
   movieList: movieListReducer,
   movieDetails: movieDetailsReducer,
   movieDelete: movieDeleteReducer,
+  movieUpdate: movieUpdateReducer,
   movieCreate: movieCreateReducer,
   movieComment: movieCommentReducer,
   movieRate: movieRateReducer,

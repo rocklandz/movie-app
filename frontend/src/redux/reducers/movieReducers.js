@@ -23,6 +23,13 @@ import {
   MOVIE_RATE_FAIL,
   MOVIE_RATE_REQUEST,
   MOVIE_RATE_SUCCESS,
+  MOVIE_DELETE_REQUEST,
+  MOVIE_DELETE_SUCCESS,
+  MOVIE_DELETE_FAIL,
+  MOVIE_UPDATE_REQUEST,
+  MOVIE_UPDATE_SUCCESS,
+  MOVIE_UPDATE_FAIL,
+  MOVIE_UPDATE_RESET,
 } from '../constants/movieConstants';
 
 export const movieListReducer = (state = { movies: [] }, action) => {
@@ -83,6 +90,26 @@ export const movieTopRatedReducer = (state = {}, action) => {
   }
 };
 
+export const movieUpdateReducer = (state = {}, action) => {
+  const { type, payload } = action;
+
+  switch (type) {
+    case MOVIE_UPDATE_REQUEST:
+      return { loading: true };
+    case MOVIE_UPDATE_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+      };
+    case MOVIE_UPDATE_FAIL:
+      return { loading: false, error: payload };
+    case MOVIE_UPDATE_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
 export const movieCreateReducer = (state = {}, action) => {
   const { type, payload } = action;
 
@@ -105,11 +132,11 @@ export const movieDeleteReducer = (state = {}, action) => {
   const { type, payload } = action;
 
   switch (type) {
-    case MOVIE_CREATE_REQUEST:
+    case MOVIE_DELETE_REQUEST:
       return { loading: true };
-    case MOVIE_CREATE_SUCCESS:
+    case MOVIE_DELETE_SUCCESS:
       return { loading: false, success: true };
-    case MOVIE_CREATE_FAIL:
+    case MOVIE_DELETE_FAIL:
       return { loading: false, error: payload };
     default:
       return state;

@@ -132,19 +132,28 @@ const Navbar = () => {
                   aria-labelledby='user-menu-button'
                   tabIndex='-1'
                 >
+                  {userInfo.isAdmin && (
+                    <>
+                      <Link
+                        to={'/admin/users'}
+                        className='block px-4 py-2 text-sm text-red-700'
+                        role='menuitem'
+                      >
+                        Manage Users
+                      </Link>
+                      <Link
+                        to={'/admin/movies'}
+                        className='block px-4 py-2 text-sm text-red-700'
+                        role='menuitem'
+                      >
+                        Manage Movies
+                      </Link>
+                    </>
+                  )}
+
                   <Link
                     className='block px-4 py-2 text-sm text-gray-700'
                     role='menuitem'
-                    tabIndex='-1'
-                    id='user-menu-item-1'
-                  >
-                    Settings
-                  </Link>
-                  <Link
-                    className='block px-4 py-2 text-sm text-gray-700'
-                    role='menuitem'
-                    tabIndex='-1'
-                    id='user-menu-item-2'
                     onClick={logoutHandler}
                   >
                     Sign out

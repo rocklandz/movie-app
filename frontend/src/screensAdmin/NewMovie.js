@@ -3,6 +3,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import CountryDropdown from '../components/CountryDropdown/CountryDropdown.js';
 import LanguageDropdown from '../components/LanguageDropdown/LanguageDropdown.js';
+import { updateMovie } from '../redux/actions/movieActions.js';
 
 const NewMovie = () => {
   const [title, setTitle] = useState('');
@@ -21,6 +22,7 @@ const NewMovie = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
+    
   };
 
   const addGenre = (e) => {

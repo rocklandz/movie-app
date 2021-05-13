@@ -19,6 +19,12 @@ import {
   MOVIE_RATE_REQUEST,
   MOVIE_RATE_SUCCESS,
   MOVIE_RATE_FAIL,
+  MOVIE_DELETE_REQUEST,
+  MOVIE_DELETE_SUCCESS,
+  MOVIE_DELETE_FAIL,
+  MOVIE_UPDATE_REQUEST,
+  MOVIE_UPDATE_SUCCESS,
+  MOVIE_UPDATE_FAIL,
 } from '../constants/movieConstants';
 
 export const getMovies = () => async (dispatch, getState) => {
@@ -87,6 +93,71 @@ export const getMoviesByGenre = (genre) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: MOVIE_GENRE_SEARCH_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const deleteMovie = (movieId) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: MOVIE_DELETE_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.delete(
+      `http://localhost:5000/api/movies/${movieId}/delete`,
+      config
+    );
+
+    dispatch({ type: MOVIE_DELETE_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: MOVIE_DELETE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const updateMovie = (movieId, movie) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: MOVIE_UPDATE_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    await axios.put(
+      `http://localhost:5000/api/movies/${movieId}/update`,
+      movie,
+      config
+    );
+
+    dispatch({ type: MOVIE_UPDATE_SUCCESS });
+  } catch (error) {
+    dispatch({
+      type: MOVIE_UPDATE_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
