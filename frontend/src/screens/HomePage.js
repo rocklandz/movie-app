@@ -3,6 +3,7 @@ import MovieGrid from '../components/MovieGrid/MovieGrid.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMovies, getTopRated } from '../redux/actions/movieActions.js';
 import { useEffect } from 'react';
+import LoadingPage from '../components/LoadingPage/LoadingPage.js';
 
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -16,8 +17,16 @@ const HomePage = () => {
 
   return (
     <>
-      <Banner movies={topMovies} />
-      <MovieGrid movies={movies} loading={loading} error={error} />
+      {loading ? (
+        <LoadingPage />
+      ) : error ? (
+        <div>{error}</div>
+      ) : (
+        <>
+          <Banner movies={topMovies} />
+          <MovieGrid movies={movies} loading={loading} error={error} />
+        </>
+      )}
     </>
   );
 };

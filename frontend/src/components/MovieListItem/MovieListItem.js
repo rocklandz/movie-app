@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { deleteMovie } from '../../redux/actions/movieActions';
 
 const MovieListItem = ({ movie }) => {
-  const { _id, title, poster_sm } = movie;
+  const { stars, _id, country, title, poster_sm } = movie;
   const dispatch = useDispatch();
 
   const deleteHandler = (movieId) => {
@@ -18,9 +18,16 @@ const MovieListItem = ({ movie }) => {
     <>
       <tr className='border-b border-gray-700 hover:bg-gray-700 bg-gray-900'>
         <td className='p-3 px-5 flex items-center'>
-          <img className='w-9 mr-4' src={poster_sm} alt='' />
-          <p>{title}</p>
+          <Link to={`/preview/${_id}`}>
+            <img className='w-9 mr-4' src={poster_sm} alt='' />
+          </Link>
+          <Link to={`/preview/${_id}`}>{title}</Link>
         </td>
+
+        <td className='p-3 px-5 text-center'>
+          <p>{country}</p>
+        </td>
+
         <td className='p-3 px-5'>
           <p>{_id}</p>
         </td>

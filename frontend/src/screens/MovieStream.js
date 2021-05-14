@@ -8,6 +8,7 @@ import { createRating, getMovie } from '../redux/actions/movieActions';
 import CommentForm from '../components/CommentForm/CommentForm';
 import Comments from '../components/Comments/Comments';
 import StarRating from '../components/StarRating/StarRating';
+import LoadingPage from '../components/LoadingPage/LoadingPage';
 
 const MovieStream = ({ match }) => {
   const dispatch = useDispatch();
@@ -18,6 +19,7 @@ const MovieStream = ({ match }) => {
   const { loading, movie, error } = useSelector((state) => state.movieDetails);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     dispatch(getMovie(movieId));
   }, [dispatch, movieId]);
 
@@ -28,7 +30,7 @@ const MovieStream = ({ match }) => {
   return (
     <>
       {loading ? (
-        <div>Loading...</div>
+        <LoadingPage />
       ) : error ? (
         <div>{error}</div>
       ) : movie ? (

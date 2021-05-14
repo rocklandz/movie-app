@@ -3,12 +3,13 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../redux/actions/userActions';
 import { AiOutlineSearch } from 'react-icons/ai';
+import { useOutsideAlert } from '../../utils/useOutsideAlert';
 
 const Navbar = () => {
   const dispatch = useDispatch();
 
   const [showMenu, setShowMenu] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
+  const [visible, setVisible, ref] = useOutsideAlert(false);
 
   const { userInfo } = useSelector((state) => state.userLogin);
 
@@ -74,7 +75,7 @@ const Navbar = () => {
               <div className='flex space-x-4'>
                 <Link
                   to={'/'}
-                  className='bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium'
+                  className='text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'
                   aria-current='page'
                 >
                   Home
@@ -107,7 +108,7 @@ const Navbar = () => {
                     {userInfo.name}
                   </p>
                   <button
-                    onClick={() => setShowSettings((state) => !state)}
+                    onClick={() => setVisible(true)}
                     type='button'
                     className='bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white'
                     id='user-menu-button'
@@ -124,8 +125,9 @@ const Navbar = () => {
                 </div>
 
                 <div
+                  ref={ref}
                   className={`${
-                    showSettings ? null : 'hidden'
+                    visible ? null : 'hidden'
                   } z-10 origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none`}
                   role='menu'
                   aria-orientation='vertical'
@@ -135,6 +137,7 @@ const Navbar = () => {
                   {userInfo.isAdmin && (
                     <>
                       <Link
+                        onClick={() => setVisible(false)}
                         to={'/admin/users'}
                         className='block px-4 py-2 text-sm text-red-700'
                         role='menuitem'
@@ -142,6 +145,7 @@ const Navbar = () => {
                         Manage Users
                       </Link>
                       <Link
+                        onClick={() => setVisible(false)}
                         to={'/admin/movies'}
                         className='block px-4 py-2 text-sm text-red-700'
                         role='menuitem'
@@ -152,6 +156,7 @@ const Navbar = () => {
                   )}
 
                   <Link
+                    onClick={() => setVisible(false)}
                     className='block px-4 py-2 text-sm text-gray-700'
                     role='menuitem'
                     onClick={logoutHandler}

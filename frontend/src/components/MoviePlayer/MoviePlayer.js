@@ -7,7 +7,7 @@ const MoviePlayer = ({ urlPath }) => {
     <div className='player-wrapper-wide'>
       <ReactPlayer
         controls
-        // playing
+        playing
         className='react-player'
         url={urlPath}
         width='100%'

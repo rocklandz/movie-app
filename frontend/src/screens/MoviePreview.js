@@ -2,6 +2,7 @@ import React from 'react';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import MovieInfo from '../components/MovieInfo/MovieInfo';
+import LoadingPage from '../components/LoadingPage/LoadingPage';
 import { getMovie } from '../redux/actions/movieActions';
 
 const MoviePreview = ({ match }) => {
@@ -9,6 +10,7 @@ const MoviePreview = ({ match }) => {
   const movieId = match.params.id;
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     dispatch(getMovie(movieId));
   }, [dispatch, movieId]);
 
@@ -17,7 +19,7 @@ const MoviePreview = ({ match }) => {
   return (
     <>
       {loading ? (
-        <div>Loading...</div>
+        <LoadingPage />
       ) : error ? (
         <div>{error}</div>
       ) : movie ? (

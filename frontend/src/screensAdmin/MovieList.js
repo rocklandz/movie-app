@@ -5,7 +5,9 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMovies } from '../redux/actions/movieActions';
 
-const MovieList = () => {
+const MovieList = ({ history }) => {
+  const { userInfo } = useSelector((state) => state.userLogin);
+
   const dispatch = useDispatch();
   const { movies, loading, error } = useSelector((state) => state.movieList);
   const {
@@ -15,8 +17,12 @@ const MovieList = () => {
   } = useSelector((state) => state.movieDelete);
 
   useEffect(() => {
-    dispatch(getMovies());
-  }, [dispatch, successDelete]);
+    if (userInfo && userInfo.isAdmin) {
+      dispatch(getMovies());
+    } else {
+      history.push('/login');
+    }
+  }, [dispatch, history, userInfo, successDelete]);
 
   return (
     <div className='max-w-7xl mx-auto mt-16 mb-32'>
@@ -37,6 +43,7 @@ const MovieList = () => {
             <tbody>
               <tr className='border-gray-300'>
                 <th className='text-left p-3 px-5'>Name</th>
+                <th className='text-left p-3 px-5'>Country</th>
                 <th className='text-left p-3 px-5'>Movie Id</th>
                 <th className='text-left p-3 px-5'></th>
               </tr>

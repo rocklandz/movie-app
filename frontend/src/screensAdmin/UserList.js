@@ -3,7 +3,7 @@ import UserListItem from '../components/UserListItem/UserListItem';
 import { useDispatch, useSelector } from 'react-redux';
 import { listUsers } from '../redux/actions/userActions';
 
-const UserList = (history) => {
+const UserList = ({ history }) => {
   const dispatch = useDispatch();
 
   const { userInfo } = useSelector((state) => state.userLogin);

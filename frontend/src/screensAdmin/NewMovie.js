@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { useSelector } from 'react-redux';
 import CountryDropdown from '../components/CountryDropdown/CountryDropdown.js';
 import LanguageDropdown from '../components/LanguageDropdown/LanguageDropdown.js';
 import { updateMovie } from '../redux/actions/movieActions.js';
 
-const NewMovie = () => {
+const NewMovie = ({ history }) => {
+  const { userInfo } = useSelector((state) => state.Login);
+
   const [title, setTitle] = useState('');
   const [overview, setOverview] = useState('');
   const [language, setLanguage] = useState(['en']);
@@ -22,7 +25,6 @@ const NewMovie = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    
   };
 
   const addGenre = (e) => {
@@ -38,6 +40,12 @@ const NewMovie = () => {
       setActorInput('');
     }
   };
+
+  useEffect(() => {
+    if (!userInfo || !userInfo.isAdmin) {
+      history.push('/login');
+    }
+  }, [history, userInfo]);
 
   return (
     <div className='max-w-7xl mx-auto mt-16 mb-32'>
