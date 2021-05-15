@@ -10,10 +10,17 @@ import {
   updateUser,
 } from '../controllers/userControllers.js';
 import { protect, admin } from '../middlewares/authMiddleware.js';
+import {
+  validateRegister,
+  validateUpdateUser,
+} from '../middlewares/validation.js';
 
 const router = express.Router();
 
-router.route('/').post(registerUser).get(protect, admin, getUsers);
+router
+  .route('/')
+  .post(validateRegister(), registerUser)
+  .get(protect, admin, getUsers);
 router.post('/login', authUser);
 router
   .route('/profile')
