@@ -67,7 +67,7 @@ export const logout = () => (dispatch) => {
   document.location.href = '/';
 };
 
-export const register = (name, email, password) => async (dispatch) => {
+export const registerUser = (name, email, password) => async (dispatch) => {
   try {
     dispatch({
       type: USER_REGISTER_REQUEST,
@@ -185,6 +185,7 @@ export const deleteUser = (id) => async (dispatch, getState) => {
   try {
     dispatch({
       type: USER_DELETE_REQUEST,
+      payload: id,
     });
 
     const {
@@ -219,6 +220,7 @@ export const updateUser = (userId, user) => async (dispatch, getState) => {
   try {
     dispatch({
       type: USER_UPDATE_REQUEST,
+      payload: userId,
     });
 
     const {

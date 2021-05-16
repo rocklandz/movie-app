@@ -25,6 +25,9 @@ import {
   MOVIE_UPDATE_REQUEST,
   MOVIE_UPDATE_SUCCESS,
   MOVIE_UPDATE_FAIL,
+  MOVIE_NAME_SEARCH_SUCCESS,
+  MOVIE_NAME_SEARCH_FAIL,
+  MOVIE_NAME_SEARCH_REQUEST,
 } from '../constants/movieConstants';
 
 export const getMovies = () => async (dispatch, getState) => {
@@ -100,6 +103,26 @@ export const getMoviesByGenre = (genre) => async (dispatch, getState) => {
     });
   }
 };
+
+export const getMoviesByName =
+  (name, pageNumber) => async (dispatch, getState) => {
+    try {
+      dispatch({ type: MOVIE_NAME_SEARCH_REQUEST });
+
+      const { data } = await axios.get(
+        `http://localhost:5000/api/movies/search?name=${name}&pageNumber=${pageNumber}`
+      );
+      dispatch({ type: MOVIE_NAME_SEARCH_SUCCESS, payload: data });
+    } catch (error) {
+      dispatch({
+        type: MOVIE_NAME_SEARCH_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
 
 export const deleteMovie = (movieId) => async (dispatch, getState) => {
   try {

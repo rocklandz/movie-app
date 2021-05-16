@@ -12,6 +12,7 @@ import MovieList from './screensAdmin/MovieList.js';
 import NewMovie from './screensAdmin/NewMovie.js';
 import EditMovie from './screensAdmin/EditMovie.js';
 import MovieGenres from './screens/MovieGenres';
+import Search from './screens/Search';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path='/genres' component={MovieGenres} exact />
         <Route path='/movie/:id' component={MovieStream} exact />
         <Route path='/preview/:id' component={MoviePreview} exact />
+        <Route path='/search' component={Search} exact />
         <Route path='/' component={HomePage} exact />
       </main>
       <Footer />

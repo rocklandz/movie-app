@@ -40,14 +40,21 @@ const getMovieById = asyncHandler(async (req, res) => {
 // @route   GET /api/movies/search?name=
 // @access  Public
 const getMoviesByName = asyncHandler(async (req, res) => {
-  const searchTerm = req.query.name.split('-').join(' ').toLowerCase();
-  const movies = await Movie.find({
-    title: { $regex: searchTerm, $options: 'i' },
-  });
+  const pageSize = 15;
+  const page = Number(req.query.pageNumber) || 1;
+
+  const searchTerm = req.query.name
+    ? { title: { $regex: req.query.name.split('-').join(' '), $options: 'i' } }
+    : {};
+
+  const count = await Movie.countDocuments({ ...searchTerm });
+  const movies = await Movie.find({ ...searchTerm })
+    .limit(pageSize)
+    .skip(pageSize * (page - 1));
 
   if (movies) {
     res.status(200);
-    res.json(movies);
+    res.json({ movies, page, pages: Math.ceil(count / pageSize) });
   } else {
     throw new Error('No movies found');
   }
@@ -62,8 +69,7 @@ const getMoviesByGenre = asyncHandler(async (req, res) => {
     genres: { $all: [searchTerm] },
   });
   if (movies) {
-    res.status(200);
-    res.json(movies);
+    res.status(200).json(movies);
   } else {
     throw new Error('No movies found');
   }

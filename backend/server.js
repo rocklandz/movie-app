@@ -6,6 +6,7 @@ import { notFound, errorHandler } from './middlewares/errorMiddleware.js';
 //  Routes
 import userRoutes from './routes/userRoutes.js';
 import movieRoutes from './routes/movieRoutes.js';
+import genreRoutes from './routes/genreRoutes.js';
 
 dotenv.config();
 connectDB();
@@ -17,6 +18,7 @@ app.use(cors());
 // Routes
 app.use('/api/users', userRoutes);
 app.use('/api/movies', movieRoutes);
+app.use('/api/genres', genreRoutes);
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '/frontend/build')));

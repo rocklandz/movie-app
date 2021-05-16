@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import UserListItem from '../components/UserListItem/UserListItem';
 import { useDispatch, useSelector } from 'react-redux';
 import { listUsers } from '../redux/actions/userActions';
+import Loader from '../components/Loader/Loader';
 
 const UserList = ({ history }) => {
   const dispatch = useDispatch();
@@ -24,20 +25,27 @@ const UserList = ({ history }) => {
           <h1 className='text-3xl font-bold'>User list</h1>
         </div>
         <div className='px-3 py-4 flex justify-center'>
-          <table className='w-full text-md bg-gray-900 shadow-md rounded mb-4'>
-            <tbody>
-              <tr>
-                <th className='text-left p-3 px-5'>Name</th>
-                <th className='text-left p-3 px-5'>Email</th>
-                <th className='text-left p-3 px-5'>Role</th>
-                <th></th>
-              </tr>
-              {users &&
-                users.map((user) => (
-                  <UserListItem key={user._id} user={user} />
-                ))}
-            </tbody>
-          </table>
+          {loading ? (
+            <div className='text-center'>
+              <Loader />
+            </div>
+          ) : (
+            <table className='w-full text-md bg-gray-900 shadow-md rounded mb-4'>
+              <tbody>
+                <tr>
+                  <th className='text-left p-3 px-5'>Name</th>
+                  <th className='text-left p-3 px-5'>Email</th>
+                  <th className='text-left p-3 px-5'>Role</th>
+                  <th></th>
+                </tr>
+
+                {users &&
+                  users.map((user) => (
+                    <UserListItem key={user._id} user={user} />
+                  ))}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
     </div>

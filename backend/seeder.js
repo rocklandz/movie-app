@@ -6,6 +6,8 @@ import movies from './data/movies.js';
 import Movie from './models/movieModel.js';
 import User from './models/userModel.js';
 import connectDB from './config/db.js';
+import Genres from './models/genreModel.js';
+import genres from './data/genres.js';
 
 dotenv.config();
 
@@ -15,6 +17,7 @@ const importData = async () => {
   try {
     await User.deleteMany();
     await Movie.deleteMany();
+    await Genres.deleteMany();
 
     const createdUsers = await User.insertMany(users);
 
@@ -25,6 +28,7 @@ const importData = async () => {
     });
 
     await Movie.insertMany(sampleMovies);
+    await Genres.insertMany(genres);
 
     console.log('Data Imported!'.green.inverse);
     process.exit();
@@ -38,6 +42,7 @@ const destroyData = async () => {
   try {
     await Movie.deleteMany();
     await User.deleteMany();
+    await Genres.deleteMany();
 
     console.log('Data Destroyed!'.red.inverse);
     process.exit();

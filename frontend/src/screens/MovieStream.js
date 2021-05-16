@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { ImFacebook2 } from 'react-icons/im';
+import { useEffect, useState } from 'react';
 import { AiOutlineStar } from 'react-icons/ai';
 import { FaImdb } from 'react-icons/fa';
 import MoviePlayer from '../components/MoviePlayer/MoviePlayer';
@@ -9,6 +8,7 @@ import CommentForm from '../components/CommentForm/CommentForm';
 import Comments from '../components/Comments/Comments';
 import StarRating from '../components/StarRating/StarRating';
 import LoadingPage from '../components/LoadingPage/LoadingPage';
+import FacebookShare from '../components/FacebookShare/FacebookShare';
 
 const MovieStream = ({ match }) => {
   const dispatch = useDispatch();
@@ -66,10 +66,11 @@ const MovieStream = ({ match }) => {
 
                   <p className='text-justify mb-5'>{movie.overview}</p>
                   <div className='flex justify-end'>
-                    <button className='share__button rounded flex items-center px-3 py-1 text-white mb-5'>
-                      <ImFacebook2 className='mr-2 text-xl' />
-                      <span>Share</span>
-                    </button>
+                    <FacebookShare
+                      url={`http://dantri.com`}
+                      quote={`Watch this awesome movie ${movie.title} at Nexflit!`}
+                      hashtag={movie.title}
+                    />
                   </div>
                 </div>
 

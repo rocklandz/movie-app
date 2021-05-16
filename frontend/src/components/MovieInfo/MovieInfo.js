@@ -1,13 +1,13 @@
-import React from 'react';
-import './MovieInfo.css';
-import { ImFacebook2 } from 'react-icons/im';
-import { FaImdb } from 'react-icons/fa';
-import { FaRegistered } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
 import ReactPlayer from 'react-player';
+import { FaImdb } from 'react-icons/fa';
+import { FaRegistered } from 'react-icons/fa';
+import { Link, useLocation } from 'react-router-dom';
+import './MovieInfo.css';
+import FacebookShare from '../FacebookShare/FacebookShare';
 
 const MovieInfo = ({ movie }) => {
+  const location = useLocation();
   const {
     _id,
     genres,
@@ -20,6 +20,7 @@ const MovieInfo = ({ movie }) => {
     adult,
     url_path,
   } = movie;
+  console.log(location);
 
   return (
     <div className=''>
@@ -56,17 +57,18 @@ const MovieInfo = ({ movie }) => {
           <div className='text-white flex items-center mb-9'>
             <FaImdb className='text-yellow-300 text-4xl mr-2' />
             <p className='text-2xl'>
-                      {movie.average_rating.toFixed(1)}{' '}
-                      <span className='text-sm text-gray-600'>
-                        ({movie.rating_count})
-                      </span>
-                    </p>
+              {movie.average_rating.toFixed(1)}{' '}
+              <span className='text-sm text-gray-600'>
+                ({movie.rating_count})
+              </span>
+            </p>
           </div>
 
-          <button className='share__button rounded flex items-center px-5 py-2 text-white mb-5'>
-            <ImFacebook2 className='mr-2 text-xl' />
-            <span>Share</span>
-          </button>
+          <FacebookShare
+            url={`http://dantri.com`}
+            quote={`Watch this awesome movie ${movie.title} at Nexflit!`}
+            hashtag={movie.title}
+          />
 
           <div className='text-white mb-3'>
             <p className='text-xl font-bold mb-1'>Stars</p>

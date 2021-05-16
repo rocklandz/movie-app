@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { register } from '../redux/actions/userActions';
+import { registerUser } from '../redux/actions/userActions';
 import Loader from '../components/Loader/Loader';
+import FormError from '../components/FormError/FormError';
 
 const Register = ({ location, history }) => {
   const dispatch = useDispatch();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-
-  const { loading, error, userInfo } = useSelector((state) => state.userLogin);
+  const { loading, error, userInfo } = useSelector(
+    (state) => state.userRegister
+  );
 
   const redirect = location.search ? location.search.split('=')[1] : '/';
 
@@ -22,9 +26,9 @@ const Register = ({ location, history }) => {
     }
   }, [userInfo, history, redirect]);
 
-  const submitHandler = (e) => {
-    e.preventDefault();
-    dispatch(register(username, email, password));
+  const onSubmit = (data) => {
+    const { name, email, password } = data;
+    dispatch(registerUser(name, email, password));
   };
 
   return (
@@ -32,7 +36,7 @@ const Register = ({ location, history }) => {
       <div className='w-full max-w-xs text-white'>
         <p className='text-3xl font-bold mb-4 px-5'>Register</p>
         <form
-          onSubmit={submitHandler}
+          onSubmit={handleSubmit(onSubmit)}
           className='bg-gray-800 bg-opacity-50 shadow-md px-5 pt-6 pb-8 mb-4'
         >
           <div className='mb-4'>
@@ -40,12 +44,22 @@ const Register = ({ location, history }) => {
               Username
             </label>
             <input
-              value={username}
-              onChange={(e) => setUsername(e.target.valuew)}
               className='text-input'
               type='text'
-              placeholder='Username'
+              name='name'
+              {...register('name', {
+                required: true,
+                minLength: 6,
+                maxLength: 32,
+              })}
             />
+            {errors.name?.type === 'required' && (
+              <FormError error={'Name is required'} />
+            )}
+            {(errors.name?.type === 'minLength' ||
+              errors.name?.type === 'maxLength') && (
+              <FormError error={'Name must have 6-32 characters'} />
+            )}
           </div>
 
           <div className='mb-4'>
@@ -53,12 +67,21 @@ const Register = ({ location, history }) => {
               Email
             </label>
             <input
-              value={email}
-              onChange={(e) => setEmail(e.target.valuew)}
               className='text-input'
               type='email'
-              placeholder='Email'
+              name='email'
+              {...register('email', {
+                required: true,
+                pattern:
+                  /^[a-z][a-z0-9_.]{3,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}$/,
+              })}
             />
+            {errors.email?.type === 'required' && (
+              <FormError error={'Email is required'} />
+            )}
+            {errors.email?.type === 'pattern' && (
+              <FormError error={'Email is not valid'} />
+            )}
           </div>
 
           <div className='mb-4'>
@@ -66,27 +89,26 @@ const Register = ({ location, history }) => {
               Password
             </label>
             <input
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
               className='text-input'
               type='password'
+              name='password'
+              {...register('password', {
+                required: true,
+                minLength: 6,
+                maxLength: 32,
+              })}
             />
-          </div>
-
-          <div className='mb-6'>
-            <label className='text-label' for='password'>
-              Confirm password
-            </label>
-            <input
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className='text-input'
-              type='password'
-            />
+            {errors.password?.type === 'required' && (
+              <FormError error={'Password is required'} />
+            )}
+            {(errors.password?.type === 'minLength' ||
+              errors.password?.type === 'maxLength') && (
+              <FormError error={'Password must have 6-32 characters'} />
+            )}
           </div>
 
           {error && (
-            <div className='mb-2 text-center text-red-400'>{error}</div>
+            <div className='mb-2 text-center text-red-500'>{error}</div>
           )}
 
           <div className='flex flex-col items-center'>

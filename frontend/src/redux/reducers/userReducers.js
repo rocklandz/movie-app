@@ -96,7 +96,7 @@ export const userUpdateReducer = (state = {}, action) => {
 
   switch (type) {
     case USER_UPDATE_REQUEST:
-      return { loading: true };
+      return { loading: true, savingId: payload };
     case USER_UPDATE_SUCCESS:
       return { loading: false, user: payload, success: true };
     case USER_UPDATE_FAIL:
@@ -113,7 +113,7 @@ export const userDeleteReducer = (state = {}, action) => {
 
   switch (type) {
     case USER_DELETE_REQUEST:
-      return { loading: true };
+      return { loading: true, deletingId: payload };
     case USER_DELETE_SUCCESS:
       return { loading: false, success: true };
     case USER_DELETE_FAIL:

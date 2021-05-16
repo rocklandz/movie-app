@@ -4,6 +4,7 @@ import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMovies } from '../redux/actions/movieActions';
+import Loader from '../components/Loader/Loader';
 
 const MovieList = ({ history }) => {
   const { userInfo } = useSelector((state) => state.userLogin);
@@ -39,20 +40,24 @@ const MovieList = ({ history }) => {
           </Link>
         </div>
         <div className='px-3 py-4 flex justify-center'>
-          <table className='w-full text-md bg-gray-900 shadow-md rounded mb-4'>
-            <tbody>
-              <tr className='border-gray-300'>
-                <th className='text-left p-3 px-5'>Name</th>
-                <th className='text-left p-3 px-5'>Country</th>
-                <th className='text-left p-3 px-5'>Movie Id</th>
-                <th className='text-left p-3 px-5'></th>
-              </tr>
-              {movies &&
-                movies.map((movie) => (
+          {loading ? (
+            <Loader />
+          ) : (
+            <table className='w-full text-md bg-gray-900 shadow-md rounded mb-4'>
+              <tbody>
+                <tr className='border-gray-300'>
+                  <th className='text-left p-3 px-5'>Name</th>
+                  <th className='text-left p-3 px-5'>Country</th>
+                  <th className='text-left p-3 px-5'>Movie Id</th>
+                  <th className='text-left p-3 px-5'></th>
+                </tr>
+
+                {movies.map((movie) => (
                   <MovieListItem key={movie._id} movie={movie} />
                 ))}
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
     </div>

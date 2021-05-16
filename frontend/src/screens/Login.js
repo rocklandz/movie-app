@@ -41,10 +41,8 @@ const Login = ({ location, history }) => {
             <input
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className='shadow appearance-none border w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
-              id='username'
+              className='text-input'
               type='text'
-              placeholder='Username'
             />
           </div>
           <div className='mb-6'>
@@ -54,14 +52,13 @@ const Login = ({ location, history }) => {
             <input
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className='shadow appearance-none border w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
-              id='password'
+              className='text-input'
               type='password'
             />
           </div>
 
           {error && (
-            <div className='mb-2 text-center text-red-400'>{error}</div>
+            <div className='mb-2 text-center text-red-500'>{error}</div>
           )}
 
           <div className='flex flex-col items-center'>

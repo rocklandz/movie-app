@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { AiOutlineSave, AiOutlineDelete } from 'react-icons/ai';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { deleteUser, updateUser } from '../../redux/actions/userActions';
 
 const UserListItem = ({ user }) => {
   const dispatch = useDispatch();
   const { _id, name, email, isAdmin } = user;
+
+  const { savingId, loading, error } = useSelector((state) => state.userUpdate);
 
   const [nameInput, setNameInput] = useState(name);
   const [emailInput, setEmailInput] = useState(email);
@@ -64,17 +65,15 @@ const UserListItem = ({ user }) => {
           <button
             onClick={() => saveHandler(_id)}
             type='button'
-            className='flex items-center mr-3 text-sm bg-blue-600 hover:bg-blue-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline'
+            className='w-20 flex items-center justify-center mr-3 text-sm bg-blue-600 hover:bg-blue-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline'
           >
-            <AiOutlineSave />
-            Save
+            {loading && savingId === _id ? 'Saving...' : 'Save'}
           </button>
           <button
             onClick={() => deleteHandler(_id)}
             type='button'
-            className='flex items-center text-sm bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline'
+            className='w-20 flex items-center justify-center text-sm bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline'
           >
-            <AiOutlineDelete />
             Delete
           </button>
         </td>

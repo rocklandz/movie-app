@@ -188,7 +188,12 @@ export const movieNameSearchReducer = (state = {}, action) => {
     case MOVIE_NAME_SEARCH_REQUEST:
       return { loading: true };
     case MOVIE_NAME_SEARCH_SUCCESS:
-      return { loading: false, movie: payload };
+      return {
+        loading: false,
+        movies: payload.movies,
+        page: payload.page,
+        pages: payload.pages,
+      };
     case MOVIE_NAME_SEARCH_FAIL:
       return { loading: false, error: payload };
     default:
@@ -203,7 +208,7 @@ export const movieGenreSearchReducer = (state = {}, action) => {
     case MOVIE_GENRE_SEARCH_REQUEST:
       return { loading: true };
     case MOVIE_GENRE_SEARCH_SUCCESS:
-      return { loading: false, movie: payload };
+      return { loading: false, movies: payload };
     case MOVIE_GENRE_SEARCH_FAIL:
       return { loading: false, error: payload };
     default:
