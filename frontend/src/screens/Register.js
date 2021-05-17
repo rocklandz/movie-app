@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { registerUser } from '../redux/actions/userActions';
 import Loader from '../components/Loader/Loader';
 import FormError from '../components/FormError/FormError';
+import avatarSrc from '../utils/avatarSrc';
 
 const Register = ({ location, history }) => {
   const dispatch = useDispatch();
@@ -14,6 +15,7 @@ const Register = ({ location, history }) => {
     formState: { errors },
   } = useForm();
 
+  const [avatar, setAvatar] = useState(avatarSrc[0]);
   const { loading, error, userInfo } = useSelector(
     (state) => state.userRegister
   );
@@ -28,7 +30,7 @@ const Register = ({ location, history }) => {
 
   const onSubmit = (data) => {
     const { name, email, password } = data;
-    dispatch(registerUser(name, email, password));
+    dispatch(registerUser(name, email, password, avatar));
   };
 
   return (
@@ -105,6 +107,26 @@ const Register = ({ location, history }) => {
               errors.password?.type === 'maxLength') && (
               <FormError error={'Password must have 6-32 characters'} />
             )}
+          </div>
+
+          <div className='mb-4'>
+            <label className='text-label' for='password'>
+              Choose your avatar
+            </label>
+            <div className='avatars grid grid-cols-4'>
+              {[
+                avatarSrc.map((src) => (
+                  <div
+                    onClick={() => setAvatar(src)}
+                    className={`cursor-pointer rounded-full overflow-hidden ${
+                      src === avatar ? 'border-2' : null
+                    }`}
+                  >
+                    <img src={src} />
+                  </div>
+                )),
+              ]}
+            </div>
           </div>
 
           {error && (

@@ -16,6 +16,12 @@ const userSchema = mongoose.Schema(
       type: String,
       require: true,
     },
+    avatar: {
+      type: String,
+      require: true,
+      default:
+        'https://res.cloudinary.com/duczq6lyl/image/upload/v1621221336/movie-app/yljn6ebp381lbsfheogv.png',
+    },
     isAdmin: {
       type: Boolean,
       require: true,

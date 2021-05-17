@@ -16,6 +16,7 @@ const authUser = asyncHandler(async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
+      avatar: user.avatar,
       isAdmin: user.isAdmin,
       token: generateToken(user._id),
     });
@@ -37,7 +38,7 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error(errMessages[0]);
   }
 
-  const { name, email, password } = req.body;
+  const { name, email, password, avatar } = req.body;
 
   const userExists = await User.findOne({ email });
 
@@ -50,6 +51,7 @@ const registerUser = asyncHandler(async (req, res) => {
     name,
     email,
     password,
+    avatar,
   });
 
   if (user) {
@@ -57,6 +59,7 @@ const registerUser = asyncHandler(async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
+      avatar: user.avatar,
       isAdmin: user.isAdmin,
       token: generateToken(user._id),
     });
@@ -77,6 +80,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
+      avatar: user.avatar,
       isAdmin: user.isAdmin,
     });
   } else {
@@ -104,6 +108,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
+      avatar: user.avatar,
       isAdmin: user.isAdmin,
       token: generateToken(updatedUser._id),
     });

@@ -25,3 +25,7 @@
 .navbar-text {
   @apply text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium;
 }
+
+.paginate-number {
+  @apply text-gray-100 w-12 md:flex justify-center items-center hidden  cursor-pointer leading-5 transition duration-150 ease-in  rounded-full;
+}

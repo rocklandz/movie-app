@@ -25,7 +25,7 @@ const getTopRated = asyncHandler(async (req, res) => {
 const getMovieById = asyncHandler(async (req, res) => {
   const movie = await Movie.findById(req.params.id).populate({
     path: 'comments',
-    populate: { path: 'user', model: 'User', select: 'name' },
+    populate: { path: 'user', model: 'User', select: 'name avatar' },
   });
 
   if (movie) {
@@ -183,7 +183,7 @@ const createComment = asyncHandler(async (req, res) => {
 
     const updatedMovie = await Movie.findById(req.params.id).populate({
       path: 'comments',
-      populate: { path: 'user', model: 'User', select: 'name' },
+      populate: { path: 'user', model: 'User', select: 'name avatar' },
     });
 
     res.status(201).json(updatedMovie);

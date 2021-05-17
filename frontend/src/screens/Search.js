@@ -1,10 +1,10 @@
-import { get } from 'mongoose';
-import React, { useEffect, useState } from 'react';
-import { BiSearch } from 'react-icons/bi';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import LoadingPage from '../components/LoadingPage/LoadingPage';
 import MovieGrid from '../components/MovieGrid/MovieGrid';
+import Pagination from '../components/Pagination/Pagination';
 import { getMoviesByName } from '../redux/actions/movieActions';
+import { BiSearch } from 'react-icons/bi';
 
 const Search = () => {
   const dispatch = useDispatch();
@@ -15,14 +15,13 @@ const Search = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     if (term) {
       dispatch(getMoviesByName(term));
     }
   };
 
   return (
-    <div className='max-w-7xl mx-auto mt-16'>
+    <div className='max-w-7xl mx-auto mt-32'>
       <div className='p-4'>
         <form
           onSubmit={handleSubmit}
@@ -50,20 +49,13 @@ const Search = () => {
 
       {loading ? (
         <LoadingPage />
-      ) : (
+      ) : movies ? (
         <>
           <MovieGrid movies={movies} loading={loading} error={error} />
 
-          {[...Array(pages).keys()].map((page) => (
-            <p
-              className='text-white cursor-pointer'
-              onClick={() => dispatch(getMoviesByName(term, page + 1))}
-            >
-              {page + 1}
-            </p>
-          ))}
+          <Pagination page={page} pages={pages} term={term} />
         </>
-      )}
+      ) : null}
     </div>
   );
 };

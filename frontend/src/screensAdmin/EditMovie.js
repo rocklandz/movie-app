@@ -30,16 +30,13 @@ const EditMovie = ({ match, history }) => {
   const [genreInput, setGenreInput] = useState('');
 
   useEffect(() => {
-    dispatch(getMovie(movieId));
-  }, []);
-
-  useEffect(() => {
     if (successUpdate) {
       dispatch({ type: MOVIE_UPDATE_RESET });
       history.push('/admin/movies');
     } else {
-      if (!movie) {
+      if (!movie || movie._id !== movieId) {
         dispatch(getMovie(movieId));
+        window.scroll(0, 0);
       } else {
         setTitle(movie.title);
         setOverview(movie.overview);
@@ -51,7 +48,7 @@ const EditMovie = ({ match, history }) => {
         setMovieUrl(movie.url_path);
       }
     }
-  }, [dispatch, history, movieId, movie, successUpdate]);
+  }, [dispatch, movieId, movie, successUpdate]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -92,7 +89,7 @@ const EditMovie = ({ match, history }) => {
             <p className='text-3xl font-bold mb-4 px-5'>Edit movie</p>
           </div>
           <div className='mt-5 mx-2 md:mt-0 sm:col-span-2'>
-            <form onSubmit={submitHandler}>
+            <form onSubmit={() => submitHandler()}>
               <div className='shadow overflow-hidden '>
                 <div className='px-4 py-5 bg-gray-800 bg-opacity-50 sm:p-6'>
                   <div className='grid grid-cols-6 gap-6'>
