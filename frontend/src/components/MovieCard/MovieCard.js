@@ -24,7 +24,12 @@ const MovieCard = ({ movie }) => {
         </div>
       </Link>
       <div className='movie__info'>
-        <h3 className='movie__title text-white font-bold'>{title}</h3>
+        <Link
+          to={`/preview/${_id}`}
+          className='movie__title text-white font-bold'
+        >
+          {title}
+        </Link>
         <p className='movie__title text-gray-400 text-xs'>
           {adult ? 'R-18' : 'PG-13'}
         </p>

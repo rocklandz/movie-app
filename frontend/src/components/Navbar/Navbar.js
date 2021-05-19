@@ -82,13 +82,6 @@ const Navbar = () => {
                 </Link>
 
                 <Link
-                  to={'/genres'}
-                  className='text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'
-                >
-                  Genres
-                </Link>
-
-                <Link
                   to={'/search'}
                   className='flex items-center text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'
                 >

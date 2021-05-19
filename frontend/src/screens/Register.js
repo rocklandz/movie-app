@@ -122,7 +122,7 @@ const Register = ({ location, history }) => {
                       src === avatar ? 'border-2' : null
                     }`}
                   >
-                    <img src={src} />
+                    <img alt='avatar' src={src} />
                   </div>
                 )),
               ]}

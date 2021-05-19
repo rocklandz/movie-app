@@ -11,7 +11,6 @@ import UserList from './screensAdmin/UserList.js';
 import MovieList from './screensAdmin/MovieList.js';
 import NewMovie from './screensAdmin/NewMovie.js';
 import EditMovie from './screensAdmin/EditMovie.js';
-import MovieGenres from './screens/MovieGenres';
 import Search from './screens/Search';
 
 function App() {
@@ -25,8 +24,6 @@ function App() {
         <Route path='/admin/users' component={UserList} exact />
         <Route path='/login' component={Login} exact />
         <Route path='/register' component={Register} exact />
-        <Route path='/genres/:genre' component={MovieGenres} exact />
-        <Route path='/genres' component={MovieGenres} exact />
         <Route path='/movie/:id' component={MovieStream} exact />
         <Route path='/preview/:id' component={MoviePreview} exact />
         <Route path='/search' component={Search} exact />

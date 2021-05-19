@@ -34,7 +34,7 @@ export const getMovies = () => async (dispatch, getState) => {
   try {
     dispatch({ type: MOVIE_LIST_REQUEST });
 
-    const { data } = await axios.get(`http://localhost:5000/api/movies`);
+    const { data } = await axios.get(`/api/movies`);
     dispatch({ type: MOVIE_LIST_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
@@ -51,9 +51,7 @@ export const getMovie = (movieId) => async (dispatch, getState) => {
   try {
     dispatch({ type: MOVIE_DETAILS_REQUEST });
 
-    const { data } = await axios.get(
-      `http://localhost:5000/api/movies/${movieId}`
-    );
+    const { data } = await axios.get(`/api/movies/${movieId}`);
     dispatch({ type: MOVIE_DETAILS_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
@@ -70,9 +68,7 @@ export const getTopRated = () => async (dispatch, getState) => {
   try {
     dispatch({ type: MOVIE_TOPRATED_DETAILS_REQUEST });
 
-    const { data } = await axios.get(
-      `http://localhost:5000/api/movies/top-rated`
-    );
+    const { data } = await axios.get(`/api/movies/top-rated`);
     dispatch({ type: MOVIE_TOPRATED_DETAILS_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
@@ -89,9 +85,7 @@ export const getMoviesByGenre = (genre) => async (dispatch, getState) => {
   try {
     dispatch({ type: MOVIE_GENRE_SEARCH_REQUEST });
 
-    const { data } = await axios.get(
-      `http://localhost:5000/api/movies/genres?genre=${genre}`
-    );
+    const { data } = await axios.get(`/api/movies/genres?genre=${genre}`);
     dispatch({ type: MOVIE_GENRE_SEARCH_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
@@ -105,12 +99,13 @@ export const getMoviesByGenre = (genre) => async (dispatch, getState) => {
 };
 
 export const getMoviesByName =
-  (name, pageNumber) => async (dispatch, getState) => {
+  (name, genre, pageNumber = 1) =>
+  async (dispatch, getState) => {
     try {
       dispatch({ type: MOVIE_NAME_SEARCH_REQUEST });
 
       const { data } = await axios.get(
-        `http://localhost:5000/api/movies/search?name=${name}&pageNumber=${pageNumber}`
+        `/api/movies/search?name=${name}&genre=${genre}&pageNumber=${pageNumber}`
       );
       dispatch({ type: MOVIE_NAME_SEARCH_SUCCESS, payload: data });
     } catch (error) {
@@ -140,7 +135,7 @@ export const deleteMovie = (movieId) => async (dispatch, getState) => {
     };
 
     const { data } = await axios.delete(
-      `http://localhost:5000/api/movies/${movieId}/delete`,
+      `/api/movies/${movieId}/delete`,
       config
     );
 
@@ -156,10 +151,9 @@ export const deleteMovie = (movieId) => async (dispatch, getState) => {
   }
 };
 
-export const updateMovie = (movieId, movie) => async (dispatch, getState) => {
+export const newMovie = (movieId, movie) => async (dispatch, getState) => {
   try {
     dispatch({ type: MOVIE_UPDATE_REQUEST });
-
     const {
       userLogin: { userInfo },
     } = getState();
@@ -171,11 +165,103 @@ export const updateMovie = (movieId, movie) => async (dispatch, getState) => {
       },
     };
 
-    await axios.put(
-      `http://localhost:5000/api/movies/${movieId}/update`,
-      movie,
-      config
+    const posterData = new FormData();
+    posterData.append('file', movie.poster_lg);
+    posterData.append('upload_preset', 'movie-poster');
+    const posterResult = await axios.post(
+      'https://api.cloudinary.com/v1_1/duczq6lyl/image/upload',
+      posterData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
     );
+
+    const backdropData = new FormData();
+    backdropData.append('file', movie.backdrop);
+    backdropData.append('upload_preset', 'movie-backdrop');
+    const backdropResult = await axios.post(
+      'https://api.cloudinary.com/v1_1/duczq6lyl/image/upload',
+      backdropData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
+
+    movie = {
+      ...movie,
+      poster_lg: posterResult.data.secure_url,
+      poster_md: posterResult.data.secure_url,
+      poster_sm: posterResult.data.secure_url,
+      backdrop: backdropResult.data.secure_url,
+    };
+
+    await axios.put(`/api/movies/${movieId}/update`, movie, config);
+
+    dispatch({ type: MOVIE_UPDATE_SUCCESS });
+  } catch (error) {
+    dispatch({
+      type: MOVIE_UPDATE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const updateMovie = (movieId, movie) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: MOVIE_UPDATE_REQUEST });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const posterData = new FormData();
+    posterData.append('file', movie.poster_lg);
+    posterData.append('upload_preset', 'movie-poster');
+    const posterResult = await axios.post(
+      'https://api.cloudinary.com/v1_1/duczq6lyl/image/upload',
+      posterData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
+
+    const backdropData = new FormData();
+    backdropData.append('file', movie.backdrop);
+    backdropData.append('upload_preset', 'movie-backdrop');
+    const backdropResult = await axios.post(
+      'https://api.cloudinary.com/v1_1/duczq6lyl/image/upload',
+      backdropData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
+
+    movie = {
+      ...movie,
+      poster_lg: posterResult.data.secure_url,
+      poster_md: posterResult.data.secure_url,
+      poster_sm: posterResult.data.secure_url,
+      backdrop: backdropResult.data.secure_url,
+    };
+
+    await axios.put(`/api/movies/${movieId}/update`, movie, config);
 
     dispatch({ type: MOVIE_UPDATE_SUCCESS });
   } catch (error) {
@@ -206,7 +292,7 @@ export const createComment =
       };
 
       const { data } = await axios.put(
-        `http://localhost:5000/api/movies/${movieId}/comment`,
+        `/api/movies/${movieId}/comment`,
         { comment },
         config
       );
@@ -239,7 +325,7 @@ export const createRating = (movieId, rating) => async (dispatch, getState) => {
     };
 
     const { data } = await axios.put(
-      `http://localhost:5000/api/movies/${movieId}/rate`,
+      `/api/movies/${movieId}/rate`,
       { rating },
       config
     );

@@ -21,6 +21,11 @@ import {
   USER_UPDATE_FAIL,
   USER_UPDATE_SUCCESS,
   USER_UPDATE_RESET,
+  USER_GOOGLE_LOGIN_SUCCESS,
+  USER_GOOGLE_LOGIN_REQUEST,
+  USER_GOOGLE_LOGIN_FAIL,
+  USER_FB_LOGIN_REQUEST,
+  USER_FB_LOGIN_SUCCESS,
 } from '../constants/userConstants';
 
 export const userLoginReducer = (state = {}, action) => {
@@ -28,9 +33,15 @@ export const userLoginReducer = (state = {}, action) => {
 
   switch (type) {
     case USER_LOGIN_REQUEST:
+    case USER_GOOGLE_LOGIN_REQUEST:
+    case USER_FB_LOGIN_REQUEST:
       return { loading: true };
     case USER_LOGIN_SUCCESS:
+    case USER_GOOGLE_LOGIN_SUCCESS:
+    case USER_FB_LOGIN_SUCCESS:
       return { loading: false, userInfo: payload };
+    case USER_GOOGLE_LOGIN_FAIL:
+    case USER_LOGIN_FAIL:
     case USER_LOGIN_FAIL:
       return { loading: false, error: payload };
     case USER_LOGOUT:
@@ -81,7 +92,12 @@ export const userListReducer = (state = { users: [] }, action) => {
     case USER_LIST_REQUEST:
       return { ...state, loading: true };
     case USER_LIST_SUCCESS:
-      return { loading: false, users: payload };
+      return {
+        loading: false,
+        users: payload.users,
+        page: payload.page,
+        pages: payload.pages,
+      };
     case USER_LIST_FAIL:
       return { loading: false, error: payload };
     case USER_LIST_RESET:

@@ -8,7 +8,7 @@ const getGenres = asyncHandler(async (req, res) => {
   const genres = await Genres.find();
   const genreObj = genres[0];
 
-  res.json(genreObj);
+  res.json(genreObj.genres);
 });
 
 // @desc    Add new genre
@@ -33,7 +33,7 @@ const addGenre = asyncHandler(async (req, res) => {
   genres.push(newGenre);
   await genreObj.save();
 
-  res.json(genreObj);
+  res.json(genreObj.genres);
 });
 
 export { getGenres, addGenre };

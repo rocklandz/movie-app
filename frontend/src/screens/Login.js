@@ -2,7 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Loader from '../components/Loader/Loader';
-import { login } from '../redux/actions/userActions';
+import {
+  login,
+  loginFacebook,
+  loginGoogle,
+} from '../redux/actions/userActions';
+import GoogleLogin from 'react-google-login';
+import FacebookLogin from 'react-facebook-login';
+import { FaFacebookF } from 'react-icons/fa';
 
 const Login = ({ location, history }) => {
   const dispatch = useDispatch();
@@ -15,6 +22,10 @@ const Login = ({ location, history }) => {
   const redirect = location.search ? location.search.split('=')[1] : '/';
 
   useEffect(() => {
+    window.scroll(0, 0);
+  }, []);
+
+  useEffect(() => {
     if (userInfo) {
       history.push(redirect);
     }
@@ -23,6 +34,15 @@ const Login = ({ location, history }) => {
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(login(email, password));
+  };
+
+  const successGoogle = (res) => {
+    dispatch(loginGoogle(res.tokenId));
+  };
+
+  const successFacebook = (res) => {
+    console.log(res);
+    dispatch(loginFacebook(res.userID, res.accessToken));
   };
 
   return (
@@ -40,9 +60,10 @@ const Login = ({ location, history }) => {
             </label>
             <input
               value={email}
+              required
               onChange={(e) => setEmail(e.target.value)}
               className='text-input'
-              type='text'
+              type='email'
             />
           </div>
           <div className='mb-6'>
@@ -51,6 +72,7 @@ const Login = ({ location, history }) => {
             </label>
             <input
               value={password}
+              required
               onChange={(e) => setPassword(e.target.value)}
               className='text-input'
               type='password'
@@ -68,7 +90,27 @@ const Login = ({ location, history }) => {
             >
               Sign In
             </button>
+
+            <div className='social mb-5 grid grid-cols-2 w-full gap-2'>
+              <GoogleLogin
+                clientId='31886157817-utg2qrjup73ci18l4ebp20v3i24kroeg.apps.googleusercontent.com'
+                buttonText='Google'
+                className='w-full'
+                onSuccess={successGoogle}
+                cookiePolicy={'single_host_origin'}
+              />
+              <FacebookLogin
+                appId='180214493979526'
+                textButton='Facebook'
+                icon={<FaFacebookF className='mr-5' />}
+                cssClass='w-full flex items-center px-2 bg-blue-500 h-full rounded-sm text-sm'
+                autoLoad={false}
+                callback={successFacebook}
+              />
+            </div>
+
             {loading && <Loader />}
+
             <div className='text-gray-400 text-sm'>
               New to us?{' '}
               <Link to={'/register'} className='text-white'>

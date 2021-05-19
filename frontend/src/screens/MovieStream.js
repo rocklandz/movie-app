@@ -9,6 +9,7 @@ import Comments from '../components/Comments/Comments';
 import StarRating from '../components/StarRating/StarRating';
 import LoadingPage from '../components/LoadingPage/LoadingPage';
 import FacebookShare from '../components/FacebookShare/FacebookShare';
+import { Link } from 'react-router-dom';
 
 const MovieStream = ({ match }) => {
   const dispatch = useDispatch();
@@ -16,6 +17,7 @@ const MovieStream = ({ match }) => {
 
   const [showRating, setShowRating] = useState(false);
 
+  const { userInfo } = useSelector((state) => state.userLogin);
   const { loading, movie, error } = useSelector((state) => state.movieDetails);
 
   useEffect(() => {
@@ -35,7 +37,7 @@ const MovieStream = ({ match }) => {
         <div>{error}</div>
       ) : movie ? (
         <>
-          <div>
+          <div className='mb-32'>
             <MoviePlayer urlPath={movie.url_path} className='mb-3' />
 
             <div className='max-w-7xl mx-auto text-white flex flex-col sm:flex-row py-5 px-3'>
@@ -75,7 +77,18 @@ const MovieStream = ({ match }) => {
                 </div>
 
                 <Comments comments={movie.comments} />
-                <CommentForm movieId={movieId} />
+                {userInfo ? (
+                  <CommentForm movieId={movieId} />
+                ) : (
+                  <div className='w-full bg-gray-700 flex items-center'>
+                    <Link
+                      to='/login'
+                      className='w-full text-center bg-gray-700 px-5 py-2'
+                    >
+                      Login to comment
+                    </Link>
+                  </div>
+                )}
               </div>
 
               <div className='w-full sm:w-1/4 text-right'>

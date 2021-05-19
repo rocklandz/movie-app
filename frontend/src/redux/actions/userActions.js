@@ -20,6 +20,12 @@ import {
   USER_UPDATE_FAIL,
   USER_UPDATE_SUCCESS,
   USER_UPDATE_REQUEST,
+  USER_GOOGLE_LOGIN_REQUEST,
+  USER_GOOGLE_LOGIN_SUCCESS,
+  USER_GOOGLE_LOGIN_FAIL,
+  USER_FB_LOGIN_REQUEST,
+  USER_FB_LOGIN_SUCCESS,
+  USER_FB_LOGIN_FAIL,
 } from '../constants/userConstants';
 
 export const login = (email, password) => async (dispatch) => {
@@ -49,6 +55,76 @@ export const login = (email, password) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: USER_LOGIN_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const loginGoogle = (googleToken) => async (dispatch) => {
+  try {
+    dispatch({
+      type: USER_GOOGLE_LOGIN_REQUEST,
+    });
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    const { data } = await axios.post(
+      '/api/users/loginGoogle',
+      { googleToken },
+      config
+    );
+
+    dispatch({
+      type: USER_GOOGLE_LOGIN_SUCCESS,
+      payload: data,
+    });
+
+    localStorage.setItem('userInfo', JSON.stringify(data));
+  } catch (error) {
+    dispatch({
+      type: USER_GOOGLE_LOGIN_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const loginFacebook = (userID, accessToken) => async (dispatch) => {
+  try {
+    dispatch({
+      type: USER_FB_LOGIN_REQUEST,
+    });
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    const { data } = await axios.post(
+      '/api/users/loginFacebook',
+      { userID, accessToken },
+      config
+    );
+
+    dispatch({
+      type: USER_FB_LOGIN_SUCCESS,
+      payload: data,
+    });
+
+    localStorage.setItem('userInfo', JSON.stringify(data));
+  } catch (error) {
+    dispatch({
+      type: USER_FB_LOGIN_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

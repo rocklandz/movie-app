@@ -21,6 +21,7 @@ import {
   userRegisterReducer,
   userUpdateReducer,
 } from './reducers/userReducers';
+import { addGenreReducers, genreListReducers } from './reducers/genreReducers';
 
 const reducers = combineReducers({
   // User reducers
@@ -42,6 +43,10 @@ const reducers = combineReducers({
   movieNameSearch: movieNameSearchReducer,
   movieGenreSearch: movieGenreSearchReducer,
   movieTopRated: movieTopRatedReducer,
+
+  // Genre reducers
+  genreList: genreListReducers,
+  addGenre: addGenreReducers,
 });
 
 const userInfoFromStorage = localStorage.getItem('userInfo')

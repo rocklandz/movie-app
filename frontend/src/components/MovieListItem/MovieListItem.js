@@ -3,9 +3,10 @@ import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { deleteMovie } from '../../redux/actions/movieActions';
+import Moment from 'react-moment';
 
 const MovieListItem = ({ movie }) => {
-  const { stars, _id, country, title, poster_sm } = movie;
+  const { actors, _id, country, title, poster_sm, release_date } = movie;
   const dispatch = useDispatch();
 
   const deleteHandler = (movieId) => {
@@ -29,7 +30,13 @@ const MovieListItem = ({ movie }) => {
         </td>
 
         <td className='p-3 px-5'>
-          <p>{_id}</p>
+          <p>
+            <Moment format='MM/DD/YYYY'>{release_date}</Moment>
+          </p>
+        </td>
+
+        <td className='p-3 px-5'>
+          <p>{actors[0]}</p>
         </td>
 
         <td className='p-3 px-5 text-right'>

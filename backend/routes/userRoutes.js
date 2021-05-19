@@ -8,6 +8,8 @@ import {
   deleteUser,
   getUserById,
   updateUser,
+  authGoogleUser,
+  authFacebookUser,
 } from '../controllers/userControllers.js';
 import { protect, admin } from '../middlewares/authMiddleware.js';
 import {
@@ -22,6 +24,8 @@ router
   .post(validateRegister(), registerUser)
   .get(protect, admin, getUsers);
 router.post('/login', authUser);
+router.post('/loginGoogle', authGoogleUser);
+router.post('/loginFacebook', authFacebookUser);
 router
   .route('/profile')
   .get(protect, getUserProfile)
@@ -31,5 +35,4 @@ router
   .delete(protect, admin, deleteUser)
   .get(protect, admin, getUserById)
   .put(protect, admin, updateUser);
-
 export default router;

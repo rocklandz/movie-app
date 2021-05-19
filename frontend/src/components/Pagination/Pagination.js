@@ -1,8 +1,9 @@
 import { GrNext, GrPrevious } from 'react-icons/gr';
 import { useDispatch } from 'react-redux';
 import { getMoviesByName } from '../../redux/actions/movieActions';
+import { listUsers } from '../../redux/actions/userActions';
 
-const Pagination = ({ page, pages, term }) => {
+const Pagination = ({ page, pages, term, genre, userPaginate = false }) => {
   const dispatch = useDispatch();
 
   const changePage = (pageNumber) => {
@@ -10,7 +11,12 @@ const Pagination = ({ page, pages, term }) => {
       return;
     }
     window.scroll(0, 0);
-    dispatch(getMoviesByName(term, pageNumber));
+    if (userPaginate) {
+      dispatch(listUsers(pageNumber));
+    }
+    if (!userPaginate) {
+      dispatch(getMoviesByName(term, genre, pageNumber));
+    }
   };
 
   return (

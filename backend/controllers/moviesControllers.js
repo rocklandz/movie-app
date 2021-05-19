@@ -37,18 +37,35 @@ const getMovieById = asyncHandler(async (req, res) => {
 });
 
 // @desc    Fetch movies by name
-// @route   GET /api/movies/search?name=
+// @route   GET /api/movies/search
 // @access  Public
 const getMoviesByName = asyncHandler(async (req, res) => {
   const pageSize = 15;
   const page = Number(req.query.pageNumber) || 1;
 
-  const searchTerm = req.query.name
-    ? { title: { $regex: req.query.name.split('-').join(' '), $options: 'i' } }
-    : {};
+  const movieName = req.query.name;
+  const genre = req.query.genre.toString();
+
+  const searchTerm =
+    genre && movieName
+      ? {
+          title: { $regex: movieName.split('-').join(' '), $options: 'i' },
+          genres: { $all: [genre] },
+        }
+      : movieName
+      ? {
+          title: { $regex: movieName.split('-').join(' '), $options: 'i' },
+        }
+      : genre
+      ? {
+          genres: { $all: [genre] },
+        }
+      : {};
 
   const count = await Movie.countDocuments({ ...searchTerm });
-  const movies = await Movie.find({ ...searchTerm })
+  const movies = await Movie.find({
+    ...searchTerm,
+  })
     .limit(pageSize)
     .skip(pageSize * (page - 1));
 
@@ -143,21 +160,29 @@ const updateMovie = asyncHandler(async (req, res) => {
     adult,
     release_date,
     url_path,
+    backdrop,
+    poster_lg,
+    poster_md,
+    poster_sm,
   } = req.body;
 
   const movie = await Movie.findById(req.params.id);
 
   if (movie) {
-    movie.title = title;
-    movie.overview = overview;
-    movie.actors = actors;
-    movie.genres = genres;
-    movie.poster = poster;
-    movie.country = country;
-    movie.language = language;
-    movie.adult = adult;
-    movie.release_date = release_date;
-    movie.url_path = url_path;
+    movie.title = title || movie.title;
+    movie.overview = overview || movie.overview;
+    movie.actors = actors || movie.actors;
+    movie.genres = genres || movie.genres;
+    movie.poster = poster || movie.poster;
+    movie.country = country || movie.country;
+    movie.language = language || movie.language;
+    movie.adult = adult || movie.adult;
+    movie.release_date = release_date || movie.release_date;
+    movie.url_path = url_path || movie.url_path;
+    movie.backdrop = backdrop || movie.backdrop;
+    movie.poster_lg = poster_lg || movie.poster_lg;
+    movie.poster_md = poster_md || movie.poster_md;
+    movie.poster_sm = poster_sm || movie.poster_sm;
 
     const updatedMovie = await movie.save();
     res.json(updatedMovie);
@@ -236,7 +261,13 @@ const rateMovie = asyncHandler(async (req, res) => {
     }
 
     await movie.save();
-    res.status(201).json(movie);
+
+    const updatedMovie = await Movie.findById(req.params.id).populate({
+      path: 'comments',
+      populate: { path: 'user', model: 'User', select: 'name avatar' },
+    });
+
+    res.status(201).json(updatedMovie);
   } else {
     res.status(404);
     throw new Error('No movie found');

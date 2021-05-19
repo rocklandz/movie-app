@@ -61,6 +61,7 @@ export const movieDetailsReducer = (state = {}, action) => {
       return { loading: true };
     case MOVIE_COMMENT_SUCCESS:
     case MOVIE_DETAILS_SUCCESS:
+    case MOVIE_RATE_SUCCESS:
       return {
         loading: false,
         movie: payload,
@@ -90,21 +91,20 @@ export const movieTopRatedReducer = (state = {}, action) => {
   }
 };
 
-export const movieUpdateReducer = (state = {}, action) => {
+export const movieUpdateReducer = (state = { movie: {} }, action) => {
   const { type, payload } = action;
 
   switch (type) {
     case MOVIE_UPDATE_REQUEST:
       return { loading: true };
     case MOVIE_UPDATE_SUCCESS:
-      return {
-        loading: false,
-        success: true,
-      };
+      return { loading: false, success: true };
     case MOVIE_UPDATE_FAIL:
       return { loading: false, error: payload };
     case MOVIE_UPDATE_RESET:
-      return {};
+      return {
+        movie: {},
+      };
     default:
       return state;
   }
@@ -167,7 +167,7 @@ export const movieRateReducer = (state = {}, action) => {
 
   switch (type) {
     case MOVIE_RATE_REQUEST:
-      return { loading: true, movies: [] };
+      return { loading: true, movies: {} };
     case MOVIE_RATE_SUCCESS:
       return {
         loading: false,
