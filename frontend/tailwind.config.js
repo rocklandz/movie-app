@@ -9,6 +9,11 @@ module.exports = {
         '50vh': '50vh',
         '75vh': '75vh',
       },
+      minHeight: {
+        '1/4': '25vh',
+        '1/2': '50vh',
+        '3/4': '75vh',
+      },
     },
   },
   variants: {

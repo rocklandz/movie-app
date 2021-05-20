@@ -12,6 +12,7 @@ import MovieList from './screensAdmin/MovieList.js';
 import NewMovie from './screensAdmin/NewMovie.js';
 import EditMovie from './screensAdmin/EditMovie.js';
 import Search from './screens/Search';
+import ManageGenres from './screensAdmin/ManageGenres';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
       <Navbar />
       <main className='min-h-screen'>
         <Route path='/admin/edit/:id' component={EditMovie} exact />
+        <Route path='/admin/genres' component={ManageGenres} exact />
         <Route path='/admin/new-movie' component={NewMovie} exact />
         <Route path='/admin/movies' component={MovieList} exact />
         <Route path='/admin/users' component={UserList} exact />

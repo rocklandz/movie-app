@@ -13,7 +13,6 @@ import {
   MOVIE_GENRE_SEARCH_SUCCESS,
   MOVIE_GENRE_SEARCH_FAIL,
   MOVIE_COMMENT_REQUEST,
-  MOVIE_CREATE_SUCCESS,
   MOVIE_COMMENT_FAIL,
   MOVIE_COMMENT_SUCCESS,
   MOVIE_RATE_REQUEST,
@@ -28,6 +27,9 @@ import {
   MOVIE_NAME_SEARCH_SUCCESS,
   MOVIE_NAME_SEARCH_FAIL,
   MOVIE_NAME_SEARCH_REQUEST,
+  MOVIE_CREATE_REQUEST,
+  MOVIE_CREATE_FAIL,
+  MOVIE_CREATE_SUCCESS,
 } from '../constants/movieConstants';
 
 export const getMovies = () => async (dispatch, getState) => {
@@ -151,9 +153,9 @@ export const deleteMovie = (movieId) => async (dispatch, getState) => {
   }
 };
 
-export const newMovie = (movieId, movie) => async (dispatch, getState) => {
+export const newMovie = (movie) => async (dispatch, getState) => {
   try {
-    dispatch({ type: MOVIE_UPDATE_REQUEST });
+    dispatch({ type: MOVIE_CREATE_REQUEST });
     const {
       userLogin: { userInfo },
     } = getState();
@@ -199,12 +201,12 @@ export const newMovie = (movieId, movie) => async (dispatch, getState) => {
       backdrop: backdropResult.data.secure_url,
     };
 
-    await axios.put(`/api/movies/${movieId}/update`, movie, config);
+    await axios.post(`/api/movies`, movie, config);
 
-    dispatch({ type: MOVIE_UPDATE_SUCCESS });
+    dispatch({ type: MOVIE_CREATE_SUCCESS });
   } catch (error) {
     dispatch({
-      type: MOVIE_UPDATE_FAIL,
+      type: MOVIE_CREATE_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

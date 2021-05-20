@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react';
-import { AiOutlineStar } from 'react-icons/ai';
-import { FaImdb } from 'react-icons/fa';
-import MoviePlayer from '../components/MoviePlayer/MoviePlayer';
 import { useDispatch, useSelector } from 'react-redux';
 import { createRating, getMovie } from '../redux/actions/movieActions';
+import { Link } from 'react-router-dom';
+import MoviePlayer from '../components/MoviePlayer/MoviePlayer';
 import CommentForm from '../components/CommentForm/CommentForm';
 import Comments from '../components/Comments/Comments';
 import StarRating from '../components/StarRating/StarRating';
 import LoadingPage from '../components/LoadingPage/LoadingPage';
 import FacebookShare from '../components/FacebookShare/FacebookShare';
-import { Link } from 'react-router-dom';
+import { AiOutlineStar } from 'react-icons/ai';
+import { FaImdb } from 'react-icons/fa';
+import Moment from 'react-moment';
 
 const MovieStream = ({ match }) => {
   const dispatch = useDispatch();
@@ -43,7 +44,10 @@ const MovieStream = ({ match }) => {
             <div className='max-w-7xl mx-auto text-white flex flex-col sm:flex-row py-5 px-3'>
               <div className='sm:w-3/4 sm:mr-5'>
                 <div>
-                  <h1 className='text-3xl mb-2'>{movie.title}</h1>
+                  <h1 className='text-3xl mb-2'>
+                    {movie.title} (
+                    <Moment format='YYYY' date={movie.release_date} />)
+                  </h1>
 
                   {showRating ? (
                     <StarRating onRating={onRating} />

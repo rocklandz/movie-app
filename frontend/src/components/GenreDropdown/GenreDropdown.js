@@ -1,7 +1,11 @@
 import Select from 'react-select';
 
-const GenreDropdown = ({ genres }) => {
-  const genreOptions = genres.map((genre) => {
+const GenreDropdown = ({ preSelect = [], genreList, setGenres }) => {
+  const genreOptions = genreList.map((genre) => {
+    return { value: genre, label: genre };
+  });
+
+  const preSelectOptions = preSelect.map((genre) => {
     return { value: genre, label: genre };
   });
 
@@ -20,10 +24,21 @@ const GenreDropdown = ({ genres }) => {
     },
   };
 
+  const handleChange = (res) => {
+    const computed = res.map((option) => option.value);
+    setGenres(computed);
+  };
+
   return (
     <>
       {genreOptions && (
-        <Select options={genreOptions} styles={customStyles} isMulti />
+        <Select
+          onChange={handleChange}
+          options={genreOptions}
+          styles={customStyles}
+          defaultValue={preSelectOptions}
+          isMulti
+        />
       )}
     </>
   );

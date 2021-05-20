@@ -10,15 +10,28 @@ const Navbar = () => {
 
   const [showMenu, setShowMenu] = useState(false);
   const [visible, setVisible, ref] = useOutsideAlert(false);
+  const [navbarBg, setNavbarBg] = useState(false);
 
   const { userInfo } = useSelector((state) => state.userLogin);
 
-  const logoutHandler = () => {
-    dispatch(logout());
+  const handleClick = () => {
+    window[`scrollTo`]({ top: 0, behavior: `smooth` });
+  };
+
+  window.onscroll = () => {
+    if (window.scrollY >= 64) {
+      setNavbarBg(true);
+    } else {
+      setNavbarBg(false);
+    }
   };
 
   return (
-    <nav className=''>
+    <nav
+      className={`sticky duration-500 ease-in-out top-0 left-0 z-10 bg-black ${
+        navbarBg ? 'bg-opacity-90' : 'bg-opacity-100'
+      }`}
+    >
       <div className='max-w-7xl mx-auto px-2 sm:px-6 lg:px-8'>
         <div className='relative flex items-center justify-between h-16'>
           <div className='absolute inset-y-0 left-0 flex items-center sm:hidden'>
@@ -67,6 +80,7 @@ const Navbar = () => {
           <div className='flex-1 flex items-center justify-center sm:items-stretch sm:justify-start'>
             <Link
               to={'/'}
+              onClick={() => handleClick()}
               className='flex-shrink-0 flex items-center text-red-600 font-bold text-2xl'
             >
               Nexflit
@@ -75,14 +89,15 @@ const Navbar = () => {
               <div className='flex space-x-4'>
                 <Link
                   to={'/'}
+                  onClick={() => handleClick()}
                   className='text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'
-                  aria-current='page'
                 >
                   Home
                 </Link>
 
                 <Link
                   to={'/search'}
+                  onClick={() => handleClick()}
                   className='flex items-center text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'
                 >
                   <AiOutlineSearch className='mr-1' />
@@ -145,14 +160,21 @@ const Navbar = () => {
                       >
                         Manage Movies
                       </Link>
+                      <Link
+                        onClick={() => setVisible(false)}
+                        to={'/admin/genres'}
+                        className='block px-4 py-2 text-sm text-red-700'
+                        role='menuitem'
+                      >
+                        Manage Genres
+                      </Link>
                     </>
                   )}
 
                   <Link
-                    onClick={() => setVisible(false)}
                     className='block px-4 py-2 text-sm text-gray-700'
                     role='menuitem'
-                    onClick={logoutHandler}
+                    onClick={() => dispatch(logout())}
                   >
                     Sign out
                   </Link>

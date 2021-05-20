@@ -5,6 +5,7 @@ import { getGenres } from '../redux/actions/genreActions';
 import GenreDropdown from '../components/GenreDropdown/GenreDropdown';
 import DatePicker from 'react-datepicker';
 import Loader from '../components/Loader/Loader';
+import LoaderButton from '../components/Loader/LoaderButton';
 import CountryDropDown from '../components/CountryDropdown/CountryDropdown';
 import UploadImage from '../components/UploadImage/UploadImage';
 import { MOVIE_UPDATE_RESET } from '../redux/constants/movieConstants';
@@ -14,15 +15,11 @@ const EditMovie = ({ match, history }) => {
   const dispatch = useDispatch();
   const movieId = match.params.id;
 
-  const { genres: genreList, loading: genreLoading } = useSelector(
-    (state) => state.genreList
-  );
+  const { genres: genreList } = useSelector((state) => state.genreList);
   const { movie, loading, error } = useSelector((state) => state.movieDetails);
-  const {
-    loading: loadingUpdate,
-    error: errorUpdate,
-    success: successUpdate,
-  } = useSelector((state) => state.movieUpdate);
+  const { loading: loadingUpdate, success: successUpdate } = useSelector(
+    (state) => state.movieUpdate
+  );
 
   const [title, setTitle] = useState('');
   const [overview, setOverview] = useState('');
@@ -36,7 +33,6 @@ const EditMovie = ({ match, history }) => {
   const [movieUrl, setMovieUrl] = useState('');
 
   const [actorInput, setActorInput] = useState('');
-  const [genreInput, setGenreInput] = useState('');
 
   useEffect(() => {
     dispatch(getGenres());
@@ -83,13 +79,6 @@ const EditMovie = ({ match, history }) => {
         url_path: movieUrl,
       })
     );
-  };
-
-  const addGenre = (e) => {
-    if (e.key === 'Enter') {
-      setGenres((state) => [...state, genreInput]);
-      setGenreInput('');
-    }
   };
 
   const addActor = () => {
@@ -201,9 +190,27 @@ const EditMovie = ({ match, history }) => {
                             htmlFor='street_address'
                             className='text-label'
                           >
+                            Genres
+                          </label>
+                          <div>
+                            {movie && (
+                              <GenreDropdown
+                                preSelect={movie.genres}
+                                setGenres={setGenres}
+                                genreList={genreList}
+                              />
+                            )}
+                          </div>
+                        </div>
+
+                        <div className='col-span-6'>
+                          <label
+                            htmlFor='street_address'
+                            className='text-label'
+                          >
                             Actors
                           </label>
-                          <div className='mb-4'>
+                          <div className='mb-4 flex flex-wrap'>
                             {actors.map((actor) => (
                               <div
                                 onClick={() => {
@@ -237,18 +244,6 @@ const EditMovie = ({ match, history }) => {
                         </div>
 
                         <div className='col-span-6'>
-                          <label
-                            htmlFor='street_address'
-                            className='text-label'
-                          >
-                            Genres
-                          </label>
-                          <div>
-                            <GenreDropdown genres={genreList} />
-                          </div>
-                        </div>
-
-                        <div className='col-span-6'>
                           <label htmlFor='postal_code' className='text-label'>
                             Movie Url
                           </label>
@@ -262,9 +257,10 @@ const EditMovie = ({ match, history }) => {
                         </div>
                       </div>
                     </div>
-                    <div className='px-4 py-3 bg-gray-800 bg-opacity-50 text-right sm:px-6'>
+                    <div className='px-4 py-3 bg-gray-800 bg-opacity-50 flex justify-end sm:px-6'>
                       <button type='submit' className='red-btn'>
-                        Save
+                        <span>Save</span>
+                        {loadingUpdate && <LoaderButton />}
                       </button>
                     </div>
                   </div>

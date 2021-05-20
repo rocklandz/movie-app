@@ -11,7 +11,7 @@
 }
 
 .red-btn {
-  @apply uppercase py-3 px-5 border border-red-700 hover:bg-red-700 mb-2 text-white;
+  @apply flex items-center justify-center uppercase py-3 px-5 border border-red-700 hover:bg-red-700 mb-2 text-white;
 }
 
 .pill-btn {
@@ -19,11 +19,11 @@
 }
 
 .actor-btn {
-  @apply border border-gray-50 inline rounded py-1 px-2 mr-2 cursor-pointer;
+  @apply border border-gray-50 inline rounded py-1 px-2 mr-2 cursor-pointer mb-2 hover:bg-red-500 hover:border-red-500;
 }
 
 .genre-btn {
-  @apply border rounded-lg py-1 px-2 cursor-pointer border-gray-300 text-gray-300 mr-2 mb-2;
+  @apply border rounded-lg py-1 px-2 border-gray-300 text-gray-300 mr-2 mb-2;
 }
 
 .navbar-text {
@@ -31,5 +31,9 @@
 }
 
 .paginate-number {
-  @apply text-gray-100 w-12 md:flex justify-center items-center hidden  cursor-pointer leading-5 transition duration-150 ease-in  rounded-full;
+  @apply text-gray-100 w-12 flex justify-center items-center cursor-pointer leading-5 transition duration-150 ease-in  rounded-full;
+}
+
+.new-genre-btn {
+  @apply rounded-lg py-1 px-2 border-gray-300 text-gray-700 mr-2 mb-2 flex items-center cursor-pointer bg-white
 }

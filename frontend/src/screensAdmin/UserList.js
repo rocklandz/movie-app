@@ -9,9 +9,10 @@ const UserList = ({ history }) => {
   const dispatch = useDispatch();
 
   const { userInfo } = useSelector((state) => state.userLogin);
-  const { loading, error, users, page, pages } = useSelector(
+  const { loading, users, page, pages } = useSelector(
     (state) => state.userList
   );
+  const { success: sucessDelete } = useSelector((state) => state.userDelete);
 
   useEffect(() => {
     if (userInfo && userInfo.isAdmin) {
@@ -19,7 +20,7 @@ const UserList = ({ history }) => {
     } else {
       history.push('/login');
     }
-  }, [dispatch, history, userInfo]);
+  }, [dispatch, history, userInfo, sucessDelete]);
 
   return (
     <div className='max-w-7xl mx-auto mt-16 mb-32'>

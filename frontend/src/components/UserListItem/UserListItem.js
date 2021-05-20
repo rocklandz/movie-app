@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteUser, updateUser } from '../../redux/actions/userActions';
+import LoaderButton from '../../components/Loader/LoaderButton';
 
 const UserListItem = ({ user }) => {
   const dispatch = useDispatch();
   const { _id, name, email, isAdmin } = user;
 
-  const { savingId, loading, error } = useSelector((state) => state.userUpdate);
+  const { savingId, loading } = useSelector((state) => state.userUpdate);
+  const {
+    deletingId,
+    loading: loadingDelete,
+  } = useSelector((state) => state.userDelete);
 
   const [nameInput, setNameInput] = useState(name);
   const [emailInput, setEmailInput] = useState(email);
@@ -65,16 +70,16 @@ const UserListItem = ({ user }) => {
           <button
             onClick={() => saveHandler(_id)}
             type='button'
-            className='w-20 flex items-center justify-center mr-3 text-sm bg-blue-600 hover:bg-blue-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline'
+            className='w-20 h-10 flex items-center justify-center mr-3 text-sm bg-blue-600 hover:bg-blue-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline'
           >
-            {loading && savingId === _id ? 'Saving...' : 'Save'}
+            {loading && savingId === _id ? <LoaderButton /> : 'Save'}
           </button>
           <button
             onClick={() => deleteHandler(_id)}
             type='button'
-            className='w-20 flex items-center justify-center text-sm bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline'
+            className='w-20 h-10 flex items-center justify-center text-sm bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline'
           >
-            Delete
+            {loadingDelete && deletingId === _id ? <LoaderButton /> : 'Delete'}
           </button>
         </td>
       </tr>

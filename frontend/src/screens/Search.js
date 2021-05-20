@@ -25,6 +25,7 @@ const Search = () => {
   };
 
   useEffect(() => {
+    window.scroll(0, 0);
     dispatch(getGenres());
   }, [dispatch]);
 
@@ -33,7 +34,7 @@ const Search = () => {
   }, [dispatch, genre]);
 
   return (
-    <div className='max-w-7xl mx-auto mt-32'>
+    <div className='max-w-7xl mx-auto md:mt-16'>
       <div className='p-4 grid grid-cols-6 gap-3'>
         <form
           onSubmit={handleSubmit}

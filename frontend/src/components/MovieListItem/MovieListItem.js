@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react';
 import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { deleteMovie } from '../../redux/actions/movieActions';
 import Moment from 'react-moment';
@@ -25,7 +24,7 @@ const MovieListItem = ({ movie }) => {
           <Link to={`/preview/${_id}`}>{title}</Link>
         </td>
 
-        <td className='p-3 px-5 text-center'>
+        <td className='p-3 px-5'>
           <p>{country}</p>
         </td>
 

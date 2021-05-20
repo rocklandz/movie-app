@@ -122,6 +122,10 @@ const createMovie = asyncHandler(async (req, res) => {
     adult,
     release_date,
     url_path,
+    backdrop,
+    poster_lg,
+    poster_md,
+    poster_sm,
   } = req.body;
 
   const movie = await Movie.create({
@@ -135,6 +139,10 @@ const createMovie = asyncHandler(async (req, res) => {
     adult,
     release_date,
     url_path,
+    backdrop,
+    poster_lg,
+    poster_md,
+    poster_sm,
   });
 
   if (movie) {

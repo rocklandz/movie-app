@@ -11,6 +11,7 @@ const HomePage = () => {
   const { movies: topMovies } = useSelector((state) => state.movieTopRated);
 
   useEffect(() => {
+    window.scroll(0, 0);
     dispatch(getMovies());
     dispatch(getTopRated());
   }, [dispatch]);

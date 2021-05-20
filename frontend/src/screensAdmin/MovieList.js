@@ -17,14 +17,10 @@ const MovieList = ({ history }) => {
 
   const { genres } = useSelector((state) => state.genreList);
   const { userInfo } = useSelector((state) => state.userLogin);
-  const { movies, page, pages, loading, error } = useSelector(
+  const { movies, page, pages, loading } = useSelector(
     (state) => state.movieNameSearch
   );
-  const {
-    loading: loadingDelete,
-    success: successDelete,
-    error: errorDelete,
-  } = useSelector((state) => state.movieDelete);
+  const { success: successDelete } = useSelector((state) => state.movieDelete);
 
   useEffect(() => {
     if (userInfo && userInfo.isAdmin) {

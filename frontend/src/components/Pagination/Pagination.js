@@ -21,7 +21,7 @@ const Pagination = ({ page, pages, term, genre, userPaginate = false }) => {
 
   return (
     <>
-      <div className='flex flex-col items-center mb-32'>
+      <div className='flex flex-col items-center mb-16'>
         <div className='flex text-gray-300'>
           <div
             onClick={() => changePage(page - 1)}
