@@ -16,6 +16,7 @@ const Navbar = () => {
 
   const handleClick = () => {
     window[`scrollTo`]({ top: 0, behavior: `smooth` });
+    setShowMenu(false)
   };
 
   window.onscroll = () => {
@@ -196,15 +197,21 @@ const Navbar = () => {
       >
         <div className='px-2 pt-2 pb-3 space-y-1'>
           <Link
-            className='bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium'
-            aria-current='page'
+            to={'/'}
+            onClick={() => handleClick()}
+            className='flex text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'
           >
             Home
           </Link>
 
-          <Link className='navbar-text'>Genres</Link>
-
-          <Link className='navbar-text'>About us</Link>
+          <Link
+            to={'/search'}
+            onClick={() => handleClick()}
+            className='flex items-center text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'
+          >
+            <AiOutlineSearch className='mr-1' />
+            Search
+          </Link>
         </div>
       </div>
     </nav>

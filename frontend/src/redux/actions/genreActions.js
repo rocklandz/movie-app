@@ -25,11 +25,25 @@ export const getGenres = () => async (dispatch, getState) => {
   }
 };
 
-export const addGenre = () => async (dispatch, getState) => {
+export const addGenre = (newGenre) => async (dispatch, getState) => {
   try {
     dispatch({ type: GENRE_ADD_REQUEST });
 
-    const { data } = await axios.get('/api/genres/add');
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.post(
+      '/api/genres/add',
+      { genre: newGenre },
+      config
+    );
     dispatch({ type: GENRE_ADD_SUCCESS, payload: data });
   } catch (error) {
     dispatch({

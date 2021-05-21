@@ -118,6 +118,7 @@ export const movieCreateReducer = (state = {}, action) => {
       return { loading: true };
     case MOVIE_CREATE_SUCCESS:
       return {
+        success: true,
         loading: false,
         movie: payload,
       };

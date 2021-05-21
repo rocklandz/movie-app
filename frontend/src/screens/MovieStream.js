@@ -12,7 +12,7 @@ import { AiOutlineStar } from 'react-icons/ai';
 import { FaImdb } from 'react-icons/fa';
 import Moment from 'react-moment';
 
-const MovieStream = ({ match }) => {
+const MovieStream = ({ match, history }) => {
   const dispatch = useDispatch();
   const movieId = match.params.id;
 
@@ -73,7 +73,7 @@ const MovieStream = ({ match }) => {
                   <p className='text-justify mb-5'>{movie.overview}</p>
                   <div className='flex justify-end'>
                     <FacebookShare
-                      url={`http://dantri.com`}
+                      url={`http://netflix.com`}
                       quote={`Watch this awesome movie ${movie.title} at Nexflit!`}
                       hashtag={movie.title}
                     />
@@ -95,8 +95,12 @@ const MovieStream = ({ match }) => {
                 )}
               </div>
 
-              <div className='w-full sm:w-1/4 text-right'>
-                <button className='red-btn'>Go Back</button>
+              <div className='w-full sm:w-1/4'>
+                <div className='flex justify-end'>
+                  <Link to={`/preview/${movieId}`} className='red-btn'>
+                    Go Back
+                  </Link>
+                </div>
               </div>
             </div>
           </div>

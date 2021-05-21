@@ -29,7 +29,7 @@ export const addGenreReducers = (state = {}, action) => {
     case GENRE_ADD_REQUEST:
       return { ...state, loading: true };
     case GENRE_ADD_SUCCESS:
-      return { loading: false, genres: payload };
+      return { loading: false, success: true, genres: payload };
     case GENRE_ADD_FAIL:
       return { loading: false, error: payload };
     default:

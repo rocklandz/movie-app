@@ -1,22 +1,24 @@
 import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
-import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { deleteMovie } from '../../redux/actions/movieActions';
 import Moment from 'react-moment';
+import { useState } from 'react';
+import ConfirmModal from '../ConfirmModal/ConfirmModal';
 
 const MovieListItem = ({ movie }) => {
   const { actors, _id, country, title, poster_sm, release_date } = movie;
-  const dispatch = useDispatch();
-
-  const deleteHandler = (movieId) => {
-    if (window.confirm('Are you sure to delete?')) {
-      dispatch(deleteMovie(movieId));
-    }
-  };
+  const [openModal, setOpenModal] = useState(false);
 
   return (
     <>
       <tr className='border-b border-gray-700 hover:bg-gray-700 bg-gray-900'>
+        {openModal && (
+          <ConfirmModal
+            movieId={_id}
+            setOpenModal={setOpenModal}
+            type={'movie'}
+          />
+        )}
+
         <td className='p-3 px-5 flex items-center'>
           <Link to={`/preview/${_id}`}>
             <img className='w-9 mr-4' src={poster_sm} alt='' />
@@ -47,8 +49,9 @@ const MovieListItem = ({ movie }) => {
               <AiOutlineEdit />
             </button>
           </Link>
+
           <button
-            onClick={() => deleteHandler(_id)}
+            onClick={() => setOpenModal(true)}
             type='button'
             className='ml-3 text-lg bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline'
           >
